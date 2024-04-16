@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-2fu#=3il6(vhs-$^1y6eixqyfusyuun2xdrzlk-_y(mun8_gko
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '192.168.64.91',
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -39,9 +42,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'authentication',
-    'core'
+    'core',
+
+    'tailwind',
+    'theme',
 ]
 
+# Tailwind Configs
+TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+NPM_BIN_PATH = 'C:/Program Files/nodejs/npm.cmd'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -125,3 +137,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'authentication.Users'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'teammghproduction@gmail.com'
+EMAIL_HOST_PASSWORD = 'euvo zkoe lnyj zukv'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

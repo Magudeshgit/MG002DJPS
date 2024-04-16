@@ -1,0 +1,95 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvenTrove || Signup</title>
+    {% tailwind_css %}
+</head>
+<body>
+    <div class="parent flex justify-between gap-4 max-h-[100vh] lg:flex-nowrap flex-wrap">
+      <div class="flex min-h-full flex-col w-[100%] justify-center px-6 py-10 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+          <!-- <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company"> -->
+          <h1 class="text-left text-3xl font-bold">InvenTrove</h1>
+          <h2 class="text-left text-xl font-semibold tracking-tight text-gray-900">Create your Account</h2>
+          <h2 class="errorsrc" style="display: none;">{{error}}</h2>
+          <p class="text-xs mt-2 errordisp" style="color: crimson;"></p>
+        </div>
+      
+        <div class=" sm:mx-auto sm:w-full sm:max-w-sm">
+          <form class="space-y-3" action="#" method="POST">
+            {% csrf_token %}
+            <div>
+                <label for="business_name" class="block text-sm font-medium leading-6 text-gray-900">Business Name</label>
+                <div class="mt-1">
+                  <input id="business_name" name="business_name" type="text" autocomplete="business_name" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+              <div class="mt-1">
+                <input id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                <div class="mt-1">
+                  <input id="email" name="password1" type="password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+
+            <div>
+                <label for="password2" class="block text-sm font-medium leading-6 text-gray-900">Re-Enter Password</label>
+                <div class="mt-1">
+                  <input id="password2" name="password2" type="password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+      
+            <!-- <div>
+              <div class="flex items-center justify-between">
+                <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                <div class="text-sm">
+                  <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                </div>
+              </div>
+              <div class="mt-2">
+                <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              </div>
+            </div> -->
+      
+            <div>
+              <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign up</button>
+            </div>
+          </form>
+      
+          <p class="mt-2 text-center text-sm text-gray-500">
+            Already have an account?
+            <a href="/auth/signin" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Signin</a>
+          </p>
+        </div>
+      </div>
+      <!-- Side banner -->
+      <div class="side flex min-h-full w-[100%]">
+        <img src="{% static 'images/banner2.jpg' %}" class="min-w-[100%] min-h-[100%]" alt="banner">
+      </div>
+    </div>
+
+<script>
+  const error = document.querySelector('.errorsrc').innerHTML
+  console.log(error)
+  const error_display = document.querySelector('.errordisp')
+  const json = JSON.parse(error)
+
+  if (error != '')
+  {
+    const error_text = json.email || json.password
+    error_display.innerText = error_text[0]['message']
+  }
+</script>
+</body>
+</html>

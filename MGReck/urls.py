@@ -1,27 +1,30 @@
-"""
-URL configuration for MGReck project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from authentication import views as avs
 from core import views as cvs
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 
+# PasswordResetView - form for mail
+# PasswordResetDoneView - mail sent template
+# PasswordResetConfirmView - new password form 
+# PasswordResetCompleteView - password reset success view
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', cvs.home),
 
-    path('auth/', avs.initial),
+    path('auth/signup/', avs.signup),
+    path('auth/signin/', avs.signin),
     path('core/', cvs.initial),
+
+    # Email Verification & Password Reset
+    path('activate/<str:uidb64>/<str:token>/', avs.activation, name='activate'),
+    path('verificationsuccess/', avs.verificationsuccess),
+    
+    path('forgotpassword/mailverification', PasswordResetView.as_view(
+        template_name='authentication/passwordresetmailview.html',
+        ), name='reset_password'),
+    path('forgotpassword/mailsuccess', PasswordResetDoneView.as_view(template_name='authentication/passwordmailsent.html'), name='password_reset_done'),
+    path('forgotpassword/newpassword/<uidb64>/<token>', PasswordResetConfirmView.as_view(template_name='authentication/passwordresetform.html'), name='password_reset_confirm'),
+    path('forgotpassword/resetsuccess', PasswordResetView.as_view(template_name='authentication/passwordresetsuccess.html'), name='password_reset_complete'),
+
 ]
