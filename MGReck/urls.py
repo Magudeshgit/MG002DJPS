@@ -10,16 +10,17 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, 
 # PasswordResetCompleteView - password reset success view
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', cvs.home),
+    path('', avs.home),
 
     path('auth/signup/', avs.signup),
     path('auth/signin/', avs.signin),
-    path('core/', cvs.initial),
+
+    # Core Functionalities
+    path('dashboard/', cvs.dashboard),
 
     # Email Verification & Password Reset
     path('activate/<str:uidb64>/<str:token>/', avs.activation, name='activate'),
     path('verificationsuccess/', avs.verificationsuccess),
-    
     path('forgotpassword/mailverification', PasswordResetView.as_view(
         template_name='authentication/passwordresetmailview.html',
         ), name='reset_password'),

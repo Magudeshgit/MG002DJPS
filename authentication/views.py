@@ -12,6 +12,10 @@ from django.utils.encoding import force_bytes, force_str
 from .models import Users
 from django.core.exceptions import ObjectDoesNotExist
 
+def home(request):
+    if request.user:
+        return redirect('/dashboard')
+    return render(request, 'authentication/home.html')
 def signup(request):
     print('asdad',get_current_site(request))
     if request.method == "POST":
