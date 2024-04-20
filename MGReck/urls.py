@@ -17,6 +17,13 @@ urlpatterns = [
 
     # Core Functionalities
     path('dashboard/', cvs.dashboard),
+    path('stocks/', cvs.stocks),
+    path('incomingstocks/', cvs.incomingstocks),
+    path('outgoingstocks/', cvs.outgoingstocks),
+    path('damagedmaterials/', cvs.damagedmaterials),
+    path('newbill/', cvs.newbill),
+    path('bills/', cvs.bills),
+    path('clientbook/', cvs.clientbook),
 
     # Email Verification & Password Reset
     path('activate/<str:uidb64>/<str:token>/', avs.activation, name='activate'),

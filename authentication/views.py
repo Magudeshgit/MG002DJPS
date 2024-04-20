@@ -36,7 +36,7 @@ def signup(request):
                 email.send()
 
                 login(request, auth)
-                return redirect("/core")
+                return redirect("/dashboard")
             else:
                 print("Error occured")
         else:
@@ -50,7 +50,7 @@ def signin(request):
         auth = authenticate(username = email, password = password)
         if auth is not None:
             login(request, auth)
-            return redirect("/core")
+            return redirect("/dashboard")
         else:
             print("Error occured")
             return render(request, "authentication/signin.html", context={'error': 'Please enter the correct credentials for your account'})

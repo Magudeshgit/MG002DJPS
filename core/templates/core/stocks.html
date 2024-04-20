@@ -5,24 +5,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InvenTrove | Dashboard</title>
+    <title>InvenTrove | All Stocks</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     {% tailwind_css %}
 </head>
-<body class="font-inter bg-[#F5F5F7] max-w-full">
-<section class="sm:ml-56 px-6 pb-4 max-w-full">
-    <!-- Navigation include -->
+<body class="font-inter bg-[#F5F5F7] max-w-full h-[100%]">
+<section class="sm:ml-56 px-6 pb-4 max-w-full min-h-[100%]">
     <div class="relative"> 
     {% include 'core/navigation.html' %}
     </div>
-    
-    <!-- Header Component -->
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div>
-            <p class="font-inter font-semibold text-xl">Dashboard</p> 
+            <p class="font-inter font-semibold text-xl">All Stocks</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p>21,April,2024</p>
@@ -31,54 +28,23 @@
             </div>
         </div>
     </div>
-    <main class="mt-4 min-w-full">
-    <!-- Info Boxes -->
-    <div class="infobox flex w-full gap-3 flex-wrap items-center">
-        <a href="/stocks" class="w-[420px] max-h-[115px]">
-        <div class="box max-w-full p-5 bg-gradient-to-r from-[#C9B4FD] to-[#EBE6FD] rounded-md hover:scale-105 transition duration-500">
-            <p class="text-xs">Available Stocks</p>
-            <p class="text-2xl font-semibold">200</p>
-        </div>
-        </a>
-        
-        <a href="/incomingstocks" class="w-[420px] max-h-[115px]">
-        <div class="box max-w-full p-5 bg-gradient-to-r from-[#F6D0A4] to-[#FBEFDF] rounded-md hover:scale-105 transition duration-500">
-            <p class="text-xs">Pending Incoming Stocks</p>
-            <p class="text-2xl font-semibold">12</p>
-        </div>
-        </a>    
-
-        <a href="/salary" class="w-[420px] max-h-[115px]">
-        <div class="box max-w-full p-5 bg-gradient-to-r from-[#BEE6A1] to-[#E0F3D6] rounded-md hover:scale-105 transition duration-500">
-            <p class="text-xs">Pending Salary</p>
-            <p class="text-2xl font-semibold">₹20,000</p>
-        </div>
-        </a>
-
-        <a href="/bills" class="w-[420px] max-h-[115px]">
-        <div class="box max-w-full p-5 bg-gradient-to-r from-[#F9C6C8] to-[#FCDFE1] rounded-md hover:scale-105 transition duration-500">
-            <p class="text-xs">Outstanding Bills</p>
-            <p class="text-2xl font-semibold">4</p>
-        </div>
-        </a>
-    </div>
+    <main class="mt-4 min-w-full h-full">
     <!-- Table -->
-    <div class="flex justify-between mt-6 items-center gap-2 flex-wrap">
-    <p class="font-semibold text-xl underline">Overview</p>
+    <div class="flex justify-between mt-2 items-center gap-2 flex-wrap">
     <div class="flex gap-2">
         <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-            New Bill
+            Purchase stock
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
         </button>
 
         <button class="px-2 py-2 bg-[#4AE450] flex items-center rounded-md gap-2 text-slate-50 text-sm font-inter">
-            Add Stock
+            Materials
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
         </button>
     </div>
     </div>
-        <div class="relative max-w-[100%] overflow-x-scroll mt-4 rounded-md">
-            <table class="text-sm text-left rtl:text-right text-gray-500 bg-white dark:text-gray-400 rounded-md shadow-md overflow-x-auto w-full">
+        <div class="relative max-w-[100%] min-h-full overflow-x-scroll mt-4 rounded-md bg-red-500">
+            <table class="text-sm text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md shadow-md overflow-x-auto w-full">
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
@@ -131,6 +97,90 @@
                         </td>
                         <td class="px-6 py-4">
                             $1999
+                        </td>
+                    </tr>
+                    <tr class=" border-b">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            Magic Mouse 2
+                        </th>
+                        <td class="px-6 py-4">
+                            Black
+                        </td>
+                        <td class="px-6 py-4">
+                            Accessories
+                        </td>
+                        <td class="px-6 py-4">
+                            $99
+                        </td>
+                    </tr>
+                    <tr class=" border-b">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            Magic Mouse 2
+                        </th>
+                        <td class="px-6 py-4">
+                            Black
+                        </td>
+                        <td class="px-6 py-4">
+                            Accessories
+                        </td>
+                        <td class="px-6 py-4">
+                            $99
+                        </td>
+                    </tr>
+                    <tr class=" border-b">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            Magic Mouse 2
+                        </th>
+                        <td class="px-6 py-4">
+                            Black
+                        </td>
+                        <td class="px-6 py-4">
+                            Accessories
+                        </td>
+                        <td class="px-6 py-4">
+                            $99
+                        </td>
+                    </tr>
+                    <tr class=" border-b">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            Magic Mouse 2
+                        </th>
+                        <td class="px-6 py-4">
+                            Black
+                        </td>
+                        <td class="px-6 py-4">
+                            Accessories
+                        </td>
+                        <td class="px-6 py-4">
+                            $99
+                        </td>
+                    </tr>
+                    <tr class=" border-b">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            Magic Mouse 2
+                        </th>
+                        <td class="px-6 py-4">
+                            Black
+                        </td>
+                        <td class="px-6 py-4">
+                            Accessories
+                        </td>
+                        <td class="px-6 py-4">
+                            $99
+                        </td>
+                    </tr>
+                    <tr class=" border-b">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            Magic Mouse 2
+                        </th>
+                        <td class="px-6 py-4">
+                            Black
+                        </td>
+                        <td class="px-6 py-4">
+                            Accessories
+                        </td>
+                        <td class="px-6 py-4">
+                            $99
                         </td>
                     </tr>
                     <tr class=" border-b">
