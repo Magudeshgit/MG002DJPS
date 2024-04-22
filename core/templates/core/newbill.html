@@ -44,21 +44,25 @@
             <div class="w-full">
                 <label for="customer" class="block text-sm font-medium leading-6 text-gray-900">Customer name</label>
                 <div class="mt-1">
-                  <input id="customer" name="customer" type="text"  required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                  <input list="clients" id="customer" name="customer" autocomplete="off" type="text"  required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
+                  <datalist id="clients" class="bg-gray-50  text-gray-900 text-sm rounded-lg flex flex-col ">
+                    <option value="" class="hidden"></option>
+                  </datalist>
                 </div>
             </div>
 
             <div class="w-full">
                 <label for="date" class="block text-sm font-medium leading-6 text-gray-900">Sales date</label>
                 <div class="mt-1">
-                  <input id="date" name="date" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                  <input id="date" name="date" type="date" autocomplete="date" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 date">
                 </div>
             </div>
         </div>
         <div class="w-full mt-4">
             <label for="items" class="block text-sm font-medium leading-6 text-gray-900">Items</label>
             <div class="mt-1">
-              <input id="items" name="items" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <input id="items" list="products" name="items" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products">
+              <datalist id="products" class="bg-gray-50  text-gray-900 text-sm rounded-lg flex flex-col"></datalist>
             </div>
         </div>
 
@@ -73,60 +77,17 @@
                         <th scope="col" class="px-6 py-3">
                             Quantity
                         </th>
-                        <th scope="col" class="px-6 py-3">
-                            Price
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Customer
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Purchase Date
-                        </th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr class="border-b">
+                <tbody class="tablewrapper">
+                    <!-- <tr class="border-b">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                             Apple MacBook Pro 17"
                         </th>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4">  
                             Silver
                         </td>
-                        <td class="px-6 py-4">
-                            Laptop
-                        </td>
-                        <td class="px-6 py-4">
-                            $2999
-                        </td>
-                    </tr>
-                    <tr class="border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Microsoft Surface Pro
-                        </th>
-                        <td class="px-6 py-4">
-                            White
-                        </td>
-                        <td class="px-6 py-4">
-                            Laptop PC
-                        </td>
-                        <td class="px-6 py-4">
-                            $1999
-                        </td>
-                    </tr>
-                    <tr class=" border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">
-                            Black
-                        </td>
-                        <td class="px-6 py-4">
-                            Accessories
-                        </td>
-                        <td class="px-6 py-4">
-                            $99
-                        </td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
@@ -150,7 +111,82 @@
             </button>
         </div>
     </div>
+    <p class="misc hidden">{{products}}</p>
+    <p class="misc hidden">{{clients}}</p>
     </main>
 </section>
+<script>
+    const misc = document.querySelectorAll('.misc')
+
+    const customer = document.querySelector('.customername')
+    const datalist  = document.querySelector('#clients')
+    
+    const product = document.querySelector('.products')
+    const prod_datalist  = document.querySelector('#products')
+    const table  = document.querySelector('.tablewrapper')
+
+    const stockdata = JSON.parse(misc[0].innerHTML)
+    const clientdata = JSON.parse(misc[1].innerHTML)
+
+    const trackset = new Set()
+
+    // Autocomplete for Customer Name Input
+    customer.addEventListener('input', ()=>{
+        clientdata.forEach(element => {
+            if (element.clientname.toLowerCase().includes(customer.value.toLowerCase()) && !trackset.has(element.clientname)){
+
+                        const option = document.createElement("option")
+                        option.innerText = element.clientname
+                        option.setAttribute('value', element.clientname)
+                        option.addEventListener('click', changeInput)
+                        datalist.append(option)
+                        trackset.add(element.clientname)
+            }
+        });
+        })
+    function changeInput(e) {
+        customer.value = e.target.value
+        e.target.parentNode.innerHTML = ''
+        trackset.clear()
+    }
+
+    product.addEventListener('input', ()=>{
+        stockdata.forEach(element => {
+            if (element.productname.toLowerCase().includes(product.value.toLowerCase()) && !trackset.has(element.productname)){
+
+                        const option = document.createElement("option")
+                        option.innerText = element.productname
+                        option.setAttribute('value', element.productname)
+                        option.addEventListener('click', changeInput_prod)
+                        prod_datalist.append(option)
+                        trackset.add(element.productname)
+            }
+        });
+        })
+    function changeInput_prod(e) {
+        product.value = e.target.value
+        e.target.parentNode.innerHTML = ''
+        const th = document.createElement('th')
+        th.innerText = e.target.value
+        th.setAttribute('scope', 'row')
+        th.setAttribute('class', 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap')
+
+        const tr = document.createElement('tr')
+        const quantity_input = document.createElement('input')
+        quantity_input.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 date')
+
+
+        tr.innerText = quantity_input
+        tr.setAttribute('scope', 'row')
+        tr.setAttribute('class', 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap')
+
+        table.append(th)     
+        
+        
+
+        trackset.clear()
+
+    }
+</script>
 </body>
 </html>

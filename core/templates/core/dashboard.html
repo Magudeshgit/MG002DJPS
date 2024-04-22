@@ -37,7 +37,7 @@
         <a href="/stocks" class="w-[420px] max-h-[115px]">
         <div class="box max-w-full p-5 bg-gradient-to-r from-[#C9B4FD] to-[#EBE6FD] rounded-md hover:scale-105 transition duration-500">
             <p class="text-xs">Available Stocks</p>
-            <p class="text-2xl font-semibold">200</p>
+            <p class="text-2xl font-semibold">{{stockcount}}</p>
         </div>
         </a>
         
@@ -94,59 +94,27 @@
                             Price
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Supplier
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Last Purchase
-                        </th>
-                        <th scope="col" class="px-6 py-3">
                             Status
                         </th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for stock in overviewdata %}
                     <tr class="border-b">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Apple MacBook Pro 17"
+                            {{stock.productname}}
                         </th>
                         <td class="px-6 py-4">
-                            Silver
+                            {{stock.category}}
                         </td>
                         <td class="px-6 py-4">
-                            Laptop
+                            {{stock.quantity}}
                         </td>
                         <td class="px-6 py-4">
-                            $2999
+                            {{stock.price}}
                         </td>
                     </tr>
-                    <tr class="border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Microsoft Surface Pro
-                        </th>
-                        <td class="px-6 py-4">
-                            White
-                        </td>
-                        <td class="px-6 py-4">
-                            Laptop PC
-                        </td>
-                        <td class="px-6 py-4">
-                            $1999
-                        </td>
-                    </tr>
-                    <tr class=" border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">
-                            Black
-                        </td>
-                        <td class="px-6 py-4">
-                            Accessories
-                        </td>
-                        <td class="px-6 py-4">
-                            $99
-                        </td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
