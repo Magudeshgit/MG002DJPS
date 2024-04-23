@@ -38,7 +38,9 @@
         </button> -->
     </div>
     </div>
-    <div class="w-full h-full p-4 bg-white rounded-md shadow-md">
+    <form class="w-full h-full p-4 bg-white rounded-md shadow-md form" method="POST" autocomplete="off">
+        <input type="text" name="hidden" class="hidden" autocomplete="false">
+        {% csrf_token %}
         <!-- Customer name and email -->
         <div class="flex items-center justify-evenly gap-4 w-full lg:flex-nowrap flex-wrap">
             <div class="w-full">
@@ -51,17 +53,17 @@
                 </div>
             </div>
 
-            <div class="w-full">
+            <!-- <div class="w-full">
                 <label for="date" class="block text-sm font-medium leading-6 text-gray-900">Sales date</label>
                 <div class="mt-1">
-                  <input id="date" name="date" type="date" autocomplete="date" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 date">
+                  <input id="date" name="date" type="date"  required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 date">
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="w-full mt-4">
             <label for="items" class="block text-sm font-medium leading-6 text-gray-900">Items</label>
             <div class="mt-1">
-              <input id="items" list="products" name="items" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products">
+              <input id="items" list="products" name="items" type="text" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products">
               <datalist id="products" class="bg-gray-50  text-gray-900 text-sm rounded-lg flex flex-col"></datalist>
             </div>
         </div>
@@ -71,6 +73,9 @@
             <table class="text-sm text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md shadow-md overflow-x-auto w-full">
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
+                        <th scope="col" class="px-6 py-3">
+                            #
+                        </th>
                         <th scope="col" class="px-6 py-3">
                             Product
                         </th>
@@ -86,37 +91,34 @@
                     </tr>
                 </thead>
                 <tbody class="tablewrapper">
-                    <!-- <tr class="border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Apple MacBook Pro 17"
-                        </th>
-                        <td class="px-6 py-4">  
-                            Silver
-                        </td>
-                    </tr> -->
                 </tbody>
             </table>
         </div>
 
         <!-- Discount -->
         <div class="w-full mt-6">
-            <label for="discount" class="block text-sm font-medium leading-6 text-gray-900">Discount</label>
+            <label for="discount" class="block text-sm font-medium leading-6 text-gray-900">Discount (in %)</label>
             <div class="mt-1">
-              <input id="discount" name="customer" type="text"  required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <input id="discount" name="customer" type="number"  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
             </div>
         </div>
         <div class="mt-4 gap-3 flex flex-col">
-            <p  class="text-xs">Subtotal: ₹1500</p>
-            <p class="text-sm">Discount: ₹500</p>
-            <p class="text-lg font-semibold">Grand Total: ₹1000</p>
+            <p  class="text-xs subtotal">Subtotal: ₹0</p>
+            <p class="text-sm discount">Discount: ₹0</p>
+            <p class="text-lg font-semibold grandtotal">Grand Total: ₹0</p>
         </div>
         <div class="flex gap-2 mt-4">
-            <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
+            <button data-status="false" class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm genbill">
                 Generate Bill
                 <img src="{% static  'images/Plus.svg' %}" alt="plus">
             </button>
+
+            <button data-status="true" class="px-2 py-2 bg-[#4FC354] flex items-center rounded-md gap-2 text-slate-50 text-sm closebill">
+                Close Bill
+                <img src="{% static  'images/done.svg' %}" alt="plus">
+            </button>
         </div>
-    </div>
+    </form>
     <p class="misc hidden">{{products}}</p>
     <p class="misc hidden">{{clients}}</p>
     </main>
@@ -134,9 +136,30 @@
     const product = document.querySelector('.products')
     const prod_datalist  = document.querySelector('#products')
     const table  = document.querySelector('.tablewrapper')
+    table.innerHTML = ''
+
+    const subtotal = document.querySelector('.subtotal')
+    const discount_input = document.querySelector('#discount')
+    const discount = document.querySelector('.discount')
+    const grandtotal = document.querySelector('.grandtotal')
+
+    const form = document.querySelector('.form')
+    const genbill = document.querySelector('.genbill')
+    const closebill = document.querySelector('.closebill')
+    genbill.addEventListener('click', formhandler)
+    closebill.addEventListener('click', formhandler)
 
     //Internal tracking for autocompletion feature
     const trackset = new Set()
+
+    // Price tracking collection
+    const priceset = new Set([0])
+
+    // Global declarations
+    let subtotalvalue, grandtotalvalue, discountvalue;
+
+
+    // **Main
 
     // Autocomplete for Customer Name Input
     customer.addEventListener('input', ()=>{
@@ -146,6 +169,7 @@
                         const option = document.createElement("option")
                         option.innerText = element.clientname
                         option.setAttribute('value', element.clientname)
+                        option.setAttribute('class', 'px-4 py-2 border-b text-md')
                         option.addEventListener('click', changeInput)
                         datalist.append(option)
                         trackset.add(element.clientname)
@@ -158,6 +182,7 @@
         trackset.clear()
     }
 
+    // Autocomplete for Product Name Input
     product.addEventListener('input', ()=>{
         stockdata.forEach(element => {
             if (element.productname.toLowerCase().includes(product.value.toLowerCase()) && !trackset.has(element.productname)){
@@ -165,18 +190,21 @@
                         const option = document.createElement("option")
                         option.innerText = element.productname
                         option.setAttribute('value', element.productname)
+                        option.setAttribute('class', 'px-4 py-2 border-b')
                         option.addEventListener('click', changeInput_prod)
                         prod_datalist.append(option)
                         trackset.add(element.productname)
             }
         });
         })
+
+    // Handling Data table for billed items
     function changeInput_prod(e) {
         product.value = e.target.value
         e.target.parentNode.innerHTML = ''
 
         const productobj = _getproductinfo(e.target.value)
-        console.log(productobj)
+
 
         // Product name column
         const th = document.createElement('th')
@@ -188,17 +216,22 @@
         tr.setAttribute('scope', 'row')
         tr.setAttribute('class', 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap')
 
-        // Quantity Column
-        const buttondivision = document.createElement('div')
-        buttondivision.setAttribute('class', 'flex max-w-[250px] item-center justify-evenly')
+        // Remove Button
+        const removebtn_row = document.createElement('td')
+        const removebtn = document.createElement('img')
+        removebtn.setAttribute('class', 'px-4 py-4')
+        removebtn.setAttribute('src', '{% static "images/Remove.svg" %}')
+        removebtn.style.cursor = 'pointer'
+        removebtn.addEventListener('click', remove_prod)
+        removebtn_row.append(removebtn)
 
+        // Quantity Column
         const quantity_row = document.createElement('td')
         const quantity_input = document.createElement('input')
         quantity_input.value = '1'
         quantity_input.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
         quantity_input.setAttribute('placeholder', 'Quantity')
-        buttondivision.append(quantity_input)
-        quantity_row.append(buttondivision)
+        quantity_row.append(quantity_input)
 
         // Available stock column
         const instock_row = document.createElement('td')
@@ -214,8 +247,11 @@
         price.setAttribute('class', 'px-6 py-4')
         price.innerText = productobj.price
 
+        priceset.add(productobj.price)
+
         price_row.append(price)
 
+        tr.append(removebtn_row)   
         tr.append(th)   
         tr.append(quantity_row)  
         tr.append(instock_row)
@@ -225,12 +261,74 @@
         
         
         product.value = ''
+        product.focus()
+        _updateprice()
         trackset.clear()
 
     }
 
+    // Remove function for added products
+    function remove_prod(e) {
+        const product = _getproductinfo(e.target.parentNode.parentNode.childNodes[1].innerText)
+        priceset.delete(product.price)
+        e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode)
+       _updateprice()
+    }
 
-    // Dependency functions
+    //Pricing handler
+
+    // TODO!!! - Complete pricing updation w.r.t quantiy
+
+        // Subtotal handlers
+    function _updateprice(discountpercent=0) {
+        subtotalvalue=0        
+        priceset.forEach(e=>{
+        subtotalvalue += e
+    })
+        discountvalue = ((discountpercent/100) * subtotalvalue)
+        grandtotalvalue = (subtotalvalue - (discountpercent/100) * subtotalvalue)
+
+        subtotal.innerText = "Subtotal: ₹" + subtotalvalue
+
+        discount.innerText = "Discount of "+ discountpercent +"%: ₹" + discountvalue
+
+        grandtotal.innerText = "Grand Total: ₹" + grandtotalvalue
+    }
+
+        // Discount handlers
+    discount_input.addEventListener('input', ()=>{
+        _updateprice(discount_input.value)
+    })
+    
+    // Form Submission Handlers
+    function formhandler(e){
+        e.preventDefault()
+        console.log(e.target.dataset.status)
+
+        const Form = new FormData(form)
+        const itemdata = new Array()
+
+        const payload =  []
+
+        table.childNodes.forEach(e=>{
+            payload.push([e.childNodes[1].innerText,e.childNodes[2].childNodes[0].value])
+        
+        })
+
+        Form.append("items", JSON.stringify(payload))
+        Form.append("customer", customer.value)
+        Form.append("billstatus", e.target.dataset.status)
+        Form.append("discount", discountvalue)
+        Form.append("subtotal", subtotalvalue)
+        Form.append("grandtotal", grandtotalvalue)
+
+        fetch('http://127.0.0.1:8000/newbill/',{
+            method: 'POST',
+            body: Form
+        })
+    }
+
+    // **Dependency functions
     function _getproductinfo(productname) {
         let found = null  
         for (let index = 0; index < stockdata.length; index++) {

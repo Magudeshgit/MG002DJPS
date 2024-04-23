@@ -21,8 +21,11 @@ urlpatterns = [
     path('incomingstocks/', cvs.incomingstocks),
     path('outgoingstocks/', cvs.outgoingstocks),
     path('damagedmaterials/', cvs.damagedmaterials),
+
     path('newbill/', cvs.newbill),
     path('bills/', cvs.bills),
+    path('reviewbill/<int:pk>/', cvs.reviewbill, name='bill'),
+
     path('clientbook/', cvs.clientbook),
 
     # Email Verification & Password Reset

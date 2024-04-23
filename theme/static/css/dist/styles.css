@@ -916,6 +916,10 @@ select {
   height: 100%;
 }
 
+.h-\[100vh\] {
+  height: 100vh;
+}
+
 .h-full {
   height: 100%;
 }
@@ -990,6 +994,10 @@ select {
 
 .max-w-\[100\%\] {
   max-width: 100%;
+}
+
+.max-w-\[250px\] {
+  max-width: 250px;
 }
 
 .max-w-\[40px\] {
@@ -1097,11 +1105,6 @@ select {
   border-bottom-width: 1px;
 }
 
-.border-gray-300 {
-  --tw-border-opacity: 1;
-  border-color: rgb(209 213 219 / var(--tw-border-opacity));
-}
-
 .bg-\[\#4AE450\] {
   --tw-bg-opacity: 1;
   background-color: rgb(74 228 80 / var(--tw-bg-opacity));
@@ -1150,6 +1153,11 @@ select {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#4FC354\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(79 195 84 / var(--tw-bg-opacity));
 }
 
 .bg-gradient-to-r {
@@ -1251,6 +1259,26 @@ select {
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .pb-4 {

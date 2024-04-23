@@ -20,18 +20,18 @@ class client(models.Model):
     def __str__(self):
         return self.clientname
     
-# class billproduct(models.Model):
-#     products = models.ForeignKey(stock, on_delete=models.CASCADE)
-#     quantity = models.PositiveBigIntegerField(default=1)
 
 class bill(models.Model):
     client = models.ManyToManyField(client)
-    billno = models.CharField(max_length=10)
-    products = models.JSONField()
-    # products = models.ManyToManyField(billproduct)
+    # billno = models.CharField(max_length=10)
+    billdate = models.DateField(auto_now_add=True)
+    billstatus = models.BooleanField(default=False) #Bill Closed/Open
+    products = models.JSONField() #Will hold product name/quantiy and bill pricing details(discount/grandtotal/subtotal)
+    grandtotal = models.CharField(max_length=10)
+
 
     def __str__(self):
-        return self.billno
+        return str(self.billdate)
     
     def get_products(self):
         return json.loads(self.products)
