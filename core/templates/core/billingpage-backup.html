@@ -77,12 +77,6 @@
                         <th scope="col" class="px-6 py-3">
                             Quantity
                         </th>
-                        <th scope="col" class="px-6 py-3">
-                            Available Stock
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Price
-                        </th>
                     </tr>
                 </thead>
                 <tbody class="tablewrapper">
@@ -122,12 +116,8 @@
     </main>
 </section>
 <script>
-    //Raw Data
     const misc = document.querySelectorAll('.misc')
-    const stockdata = JSON.parse(misc[0].innerHTML)
-    const clientdata = JSON.parse(misc[1].innerHTML)
 
-    //DOM Attributes
     const customer = document.querySelector('.customername')
     const datalist  = document.querySelector('#clients')
     
@@ -135,7 +125,9 @@
     const prod_datalist  = document.querySelector('#products')
     const table  = document.querySelector('.tablewrapper')
 
-    //Internal tracking for autocompletion feature
+    const stockdata = JSON.parse(misc[0].innerHTML)
+    const clientdata = JSON.parse(misc[1].innerHTML)
+
     const trackset = new Set()
 
     // Autocomplete for Customer Name Input
@@ -174,13 +166,8 @@
     function changeInput_prod(e) {
         product.value = e.target.value
         e.target.parentNode.innerHTML = ''
-
-        const productobj = _getproductinfo(e.target.value)
-        console.log(productobj)
-
-        // Product name column
         const th = document.createElement('th')
-        th.innerText = productobj.productname
+        th.innerText = e.target.value
         th.setAttribute('scope', 'row')
         th.setAttribute('class', 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap')
 
@@ -188,39 +175,28 @@
         tr.setAttribute('scope', 'row')
         tr.setAttribute('class', 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap')
 
-        // Quantity Column
         const buttondivision = document.createElement('div')
         buttondivision.setAttribute('class', 'flex max-w-[250px] item-center justify-evenly')
 
-        const quantity_row = document.createElement('td')
-        const quantity_input = document.createElement('input')
-        quantity_input.value = '1'
-        quantity_input.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
-        quantity_input.setAttribute('placeholder', 'Quantity')
-        buttondivision.append(quantity_input)
-        quantity_row.append(buttondivision)
+        const add_quantity = document.createElement('button')
+        add_quantity.setAttribute('class', 'block w-full text-xl rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 date')
+        add_quantity.innerText = '+'
+        add_quantity.addEventListener('click', incrementquantity)
 
-        // Available stock column
-        const instock_row = document.createElement('td')
-        const instock = document.createElement('p')
-        instock.setAttribute('class', 'px-6 py-4')
-        instock.innerText = productobj.quantity
+        const curr_quantity = document.createElement('p')
+        curr_quantity.innerText = '1'
 
-        instock_row.append(instock)
-        
-        // Pricing Column
-        const price_row = document.createElement('td')
-        const price = document.createElement('p')
-        price.setAttribute('class', 'px-6 py-4')
-        price.innerText = productobj.price
+        const sub_quantity = document.createElement('button')
+        sub_quantity.innerText = '-'
+        sub_quantity.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 date')
+        sub_quantity.addEventListener('click', decrementquantity)
 
-        price_row.append(price)
+        buttondivision.append(add_quantity)
+        buttondivision.append(curr_quantity)
+        buttondivision.append(sub_quantity)
 
         tr.append(th)   
-        tr.append(quantity_row)  
-        tr.append(instock_row)
-        tr.append(price)
-        
+        tr.append(buttondivision)  
         table.append(tr)
         
         
@@ -229,17 +205,12 @@
 
     }
 
+    function incrementquantity(e) {
+     e.target.parentNode.childNodes[1].innerText +=1
+    }
 
-    // Dependency functions
-    function _getproductinfo(productname) {
-        let found = null  
-        for (let index = 0; index < stockdata.length; index++) {
-            if (stockdata[index].productname === productname)
-            {
-                return stockdata[index]
-            } 
-        }
-        return found
+    function decrementquantity(e) {
+        console.log(e.target)   
     }
 </script>
 </body>
