@@ -6,5 +6,6 @@ from .models import *
 admin.site.register([stock,
                      client,
                      bill,
-                     labor  
+                     labor,
+                     attendance
                      ])

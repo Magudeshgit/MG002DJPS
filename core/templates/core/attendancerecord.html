@@ -1,0 +1,109 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvenTrove | Salary management</title>
+    {% tailwind_css %}
+</head>
+<body>
+    <section class="sm:ml-56 px-6 pb-4 max-w-full min-h-[100%]">
+    <div class="relative">
+        {% include 'core/navigation.html' %}
+    </div>
+    <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
+        <div>
+            <p class="font-inter font-semibold text-xl">Attendance Records</p> 
+        </div>
+        <div class="items-center gap-4 hidden sm:flex">
+            <p>21,April,2024</p>
+            <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
+                <p class="text-slate-300">M</p>
+            </div>
+        </div>
+    </div>
+    <div class="flex gap-2">
+        <!-- <a href="/bills">
+            <button class="px-2 py-2 bg-[#4AE450] flex items-center rounded-md gap-2 text-slate-50 text-sm">
+                View Records
+                <img src="{% static  'images/Arrow right.svg' %}" alt="plus">
+            </button>
+        </a> -->
+
+        <!-- <button class="px-2 py-2 bg-[#4AE450] flex items-center rounded-md gap-2 text-slate-50 text-sm font-inter">
+            Materials
+            <img src="{% static  'images/Plus.svg' %}" alt="plus">
+        </button> -->
+    </div>
+    <main>
+        <div class="today">
+            <table class="mt-4 text-sm text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md overflow-x-auto w-full">
+                <p>Today: 22/02/2023</p>
+                <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Labor name
+                        </th>
+                        {% for date in attendance %}
+                        <th scope="col" class="px-6 py-3">
+                            {{date}}
+                        </th>
+                        {%endfor%}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for labor in labors %}
+                    <tr class="border-b">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            <a href="{% url 'editlabor' labor.id%}" class="hover:underline">
+                            {{labor.laborname}}
+                            </a>
+                        </th>
+                        <td class="px-6 py-4">
+                            {% for attended in attendance %}
+                                {% if labor.laborname in attended.absent %}
+                                <input type="checkbox" disabled name="" class="rounded-md attendance" data-laborname="{{labor.laborname}}">
+                                {% else %}
+                                <input type="checkbox" disabled checked name="" class="rounded-md attendance" data-laborname="{{labor.laborname}}">
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="today">
+        </div>
+    </main>
+    </section>  
+
+    <script>
+        const form  =  document.querySelector('.form')
+        form.addEventListener('submit',(e)=>{
+            e.preventDefault()
+            const attendance = document.querySelectorAll('.attendance')
+            const absentees = new Array()
+            const Form = new FormData(form)
+
+            attendance.forEach(e=>{
+                if (!e.checked)
+                {   
+                    absentees.push(e.dataset.laborname)
+                }
+            })
+            const absentees_data = JSON.stringify(absentees)
+            Form.append("absentees", absentees_data)
+          
+            fetch(document.location.origin+'/attendance/',{
+                method: 'POST',
+                body: Form
+        })
+        document.location.reload()
+        })
+    </script>
+</body>
+</html>

@@ -32,10 +32,12 @@
     <!-- Table -->
     <div class="flex justify-between mt-2 items-center gap-2 flex-wrap">
     <div class="flex gap-2">
+        <a href="/addlabor">
         <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
             Add Labor
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
         </button>
+        </a>
     </div>
     </div>
         <div class="relative max-w-[100%] min-h-full overflow-x-scroll mt-4 rounded-md bg-red-500">
@@ -57,7 +59,9 @@
                     {% for labor in labors %}
                     <tr class="border-b">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            {{labor.laborname}}
+                            <a href="{% url 'editlabor' labor.id%}">
+                                {{labor.laborname}}
+                            </a>
                         </th>
                         <td class="px-6 py-4">
                             {{labor.contactnumber}}

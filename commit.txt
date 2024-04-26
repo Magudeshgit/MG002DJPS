@@ -1,0 +1,17 @@
+create stock - done
+
+Edit stock - done
+
+create client - done
+
+create labor - done
+
+labor attendance page  - done
+
+client book, labor book - done
+
+create client if not present - done
+
+submission loading in billing page - done
+
+re add stock on bill close - done (check required)

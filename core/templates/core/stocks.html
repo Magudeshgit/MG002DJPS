@@ -68,8 +68,10 @@
                 <tbody>
                     {% for stock in stocks %}
                     <tr class="border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        <th scope="row" class="hover:underline px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            <a href="{% url 'editstock' stock.id%}">
                             {{stock.productname}}
+                            </a>
                         </th>
                         <td class="px-6 py-4">
                             {{stock.category}}
@@ -81,6 +83,7 @@
                             {{stock.price}}
                         </td>
                     </tr>
+                    
                     {% endfor %}
                     
                 </tbody>

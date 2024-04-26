@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import stock, client, bill, labor
+from .models import stock, client, bill, labor, attendance
+from django.utils import timezone
 from django.db.models import Count
 import json
 
@@ -40,18 +41,122 @@ def damagedmaterials(request):
     return render(request, "core/damagedmaterials.html")
 
 def addstock(request):
-    return render(request, "core/addstock.html")
+    created=False
+    if request.method == 'POST':
+        _productname = request.POST.get('productname')
+        _category = request.POST.get('category')
+        _quantity = request.POST.get('quantity')
+        _price = request.POST.get('price')
+
+        stock.objects.create(productname = _productname, category=_category, maximumstock=_quantity,quantity=_quantity, price=_price)
+        created=True
+    return render(request, "core/addstock.html", context={"created": created})
+
+def editstock(request,pk):
+    created=False
+    prod = stock.objects.get(id=pk)
+    if request.method == 'POST':
+        _productname = request.POST.get('productname')
+        _category = request.POST.get('category')
+        _quantity = request.POST.get('quantity')
+        _price = request.POST.get('price')
+        #temp= int(prod.maximumstock)
+        # temp += _quantity
+
+        prod.productname = _productname
+        prod.category=_category
+        prod.maximumstock+=int(_quantity)
+        prod.quantity=int(_quantity)
+        prod.price=_price
+        prod.save()
+        created=True
+    return render(request, "core/editstock.html", context={"created": created, "editinfo": prod})
+
+def deletestock(request,pk):
+    prod = stock.objects.get(id=pk)
+    prod.delete()
+    return redirect('/stocks')
+
+def addcustomer(request):
+    created=False
+    if request.method == 'POST':
+        _customername = request.POST.get('customername')
+        _contact = request.POST.get('contact')
+        _address = request.POST.get('address')
+
+        client.objects.create(
+            clientname=_customername,
+            contactnumber=_contact,
+            address = _address
+        )
+
+        created=True
+    return render(request, "core/addclient.html", context={'created':created})
+
+def editcustomer(request,pk):
+    created=False
+    cust = client.objects.get(id=pk)
+    if request.method == 'POST':
+        _customername = request.POST.get('customername')
+        _contact = request.POST.get('contact')
+        _address = request.POST.get('address')
+
+        cust.clientname = _customername
+        cust.contactnumber=_contact
+        cust.address=_address
+        cust.save()
+        created=True
+    return render(request, "core/editclient.html", context={"created": created, "editinfo": cust})
+
+def deletecustomer(request,pk):
+    cust = client.objects.get(id=pk)
+    cust.delete()
+    return redirect('/clientbook')
+
+def addlabor(request):
+    created=False
+    if request.method == 'POST':
+        _laborname = request.POST.get('laborname')
+        _contact = request.POST.get('contact')
+        _address = request.POST.get('address')
+
+        labor.objects.create(
+            laborname=_laborname,
+            contactnumber=_contact,
+            address = _address
+        )
+
+        created=True
+    return render(request, "core/addlabor.html", {'created':created})
+
+def editlabor(request,pk):
+    created=False
+    cust = labor.objects.get(id=pk)
+    if request.method == 'POST':
+        _laborname = request.POST.get('laborname')
+        _contact = request.POST.get('contact')
+        _address = request.POST.get('address')
+
+        cust.laborname = _laborname
+        cust.contactnumber=_contact
+        cust.address=_address
+        cust.save()
+        created=True
+    return render(request, "core/editlabor.html", context={"created": created, "editinfo": cust})
+
+def deletelabor(request,pk):
+    cust = labor.objects.get(id=pk)
+    cust.delete()
+    return redirect('/laborbook')
 
 def bills(request):
     _bill = reversed(bill.objects.all())
-    print(_bill)
     
     context = {'bills':_bill}
     return render(request, "core/bills.html", context)
 
 def newbill(request):
     if request.method == 'POST':
-        print(request.POST)
         customer = request.POST.get('customer')
         items = request.POST.get('items')
         billstatus = request.POST.get('billstatus')
@@ -70,9 +175,8 @@ def newbill(request):
                 _product.quantity = _product.quantity - int(i[1])
                 _product.save()
 
-        _customer = client.objects.get(clientname=customer)
-        new_bill = bill.objects.create(products=jsondata, grandtotal=int(grandtotal))   
-        new_bill.client.add(_customer)
+        _customer, status = client.objects.get_or_create(clientname=customer)
+        new_bill = bill.objects.create(client=_customer,products=jsondata, grandtotal=int(grandtotal))   
         new_bill.save()
     
     clients = client.objects.values_list('clientname')
@@ -123,13 +227,30 @@ def reviewbill(request,pk=None):
     stocks = json.dumps(list(stocks.values()))
 
     _editbill = bill.objects.get(id=pk)
-    context = {'bill': _editbill, 'customer': _editbill.client.all()[0].clientname, 'items': _editbill.products, "clients": clients, "products": stocks}
+    context = {'bill': _editbill, 'customer': _editbill.client, 'items': _editbill.products, "clients": clients, "products": stocks}
     return render(request, "core/editbill.html", context)
 
 def clientbook(request):
     clients = client.objects.all()
-    return render(request, "core/clientbook.html", {'clients': clients})
+    context = {'clients': clients}
+    return render(request, "core/clientbook.html", context)
 
 def laborbook(request):
     labors = labor.objects.all()
     return render(request, "core/laborbook.html", {'labors': labors})
+
+def attendancemanagement(request):
+    attendances, status = attendance.objects.get_or_create(date=timezone.now())
+    labors = labor.objects.all()
+    if request.method=='POST':
+        _absentees = request.POST.get('absentees')
+        _absentees = json.loads(_absentees)
+        attendances.absentees.clear()
+        for i in _absentees:
+            attendances.absentees.add(labors.get(laborname=i))
+    return render(request, "core/attendancemanagement.html", {'attendance': attendances, 'labors':labors, 'status':status})
+
+def attendancerecords(request):
+    attendances = attendance.objects.all()
+    labors = labor.objects.all()
+    return render(request, "core/attendancerecord.html", {'attendance': attendances, 'labors':labors})

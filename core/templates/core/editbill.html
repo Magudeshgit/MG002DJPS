@@ -402,7 +402,7 @@
         Form.append("discount", discountvalue)
         Form.append("subtotal", subtotalvalue)
         Form.append("grandtotal", grandtotalvalue)
-        fetch('http://127.0.0.1:8000/reviewbill/' + '{{bill.id}}/',{
+        fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
             method: 'POST',
             body: Form
         })

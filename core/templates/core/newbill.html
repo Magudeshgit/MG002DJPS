@@ -340,10 +340,11 @@
         Form.append("grandtotal", grandtotalvalue)
 
         console.log(Form)
-        fetch('http://127.0.0.1:8000/newbill/',{
+        fetch(document.location.origin+'/newbill/',{
             method: 'POST',
             body: Form
         })
+        location.reload()
     }
 
     // **Dependency functions

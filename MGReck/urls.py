@@ -29,6 +29,21 @@ urlpatterns = [
     path('clientbook/', cvs.clientbook),
     path('laborbook/', cvs.laborbook),
 
+    path('addstock/', cvs.addstock),
+    path('editstock/<pk>/', cvs.editstock, name='editstock'),
+    path('deletestock/<pk>/', cvs.deletestock, name='deletestock'),
+
+    path('addclient/', cvs.addcustomer),
+    path('editclient/<pk>/', cvs.editcustomer, name='editcustomer'),
+    path('deletecustomer/<pk>/', cvs.deletecustomer, name='deletecustomer'),
+
+    path('addlabor/', cvs.addlabor),
+    path('editlabor/<pk>/', cvs.editlabor, name='editlabor'),
+    path('deletelabor/<pk>/', cvs.deletelabor, name='deletelabor'),
+
+    path('attendance/', cvs.attendancemanagement),
+    path('attendancerecord/', cvs.attendancerecords),
+
     # Email Verification & Password Reset
     path('activate/<str:uidb64>/<str:token>/', avs.activation, name='activate'),
     path('verificationsuccess/', avs.verificationsuccess),

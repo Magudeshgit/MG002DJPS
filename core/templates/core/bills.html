@@ -60,7 +60,10 @@
                     <tr class="border-b hover:shadow-md">
                         
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap hover:underline">
-                            <a href="{% url 'bill' bill.id%}">{{bill.billdate}}</a>
+                            <a href="{% url 'bill' bill.id%}">
+                                <p>{{bill.client}}</p>
+                                <p class="text-xs text-slate-500">{{bill.billdate}}</p>
+                            </a>
                         </th>
                         <td class="px-6 py-4">
                             {% if bill.billstatus == False %}
