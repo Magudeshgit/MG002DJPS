@@ -57,7 +57,7 @@
                 </thead>
                 <tbody>
                     {% for bill in bills %}
-                    <tr class="border-b">
+                    <tr class="border-b hover:shadow-md">
                         
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap hover:underline">
                             <a href="{% url 'bill' bill.id%}">{{bill.billdate}}</a>

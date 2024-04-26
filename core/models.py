@@ -6,11 +6,15 @@ import json
 class stock(models.Model):
     productname = models.CharField(max_length=70, db_index=True)
     category = models.CharField(max_length=50)
+    maximumstock = models.IntegerField()
     quantity = models.IntegerField()
     price = models.IntegerField()
 
     def __str__(self):
         return self.productname
+    
+    def get_incoming(self):
+        return self.maximumstock - self.quantity
     
 class client(models.Model):
     clientname = models.CharField(max_length=50)
@@ -19,7 +23,6 @@ class client(models.Model):
 
     def __str__(self):
         return self.clientname
-    
 
 class bill(models.Model):
     client = models.ManyToManyField(client)

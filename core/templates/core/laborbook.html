@@ -19,7 +19,7 @@
     </div>
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div>
-            <p class="font-inter font-semibold text-xl">Client Book</p> 
+            <p class="font-inter font-semibold text-xl">Labor Book</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p>21,April,2024</p>
@@ -33,7 +33,7 @@
     <div class="flex justify-between mt-2 items-center gap-2 flex-wrap">
     <div class="flex gap-2">
         <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-            Add Customer
+            Add Labor
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
         </button>
     </div>
@@ -43,7 +43,7 @@
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            Customer
+                            Labor name
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Contact number
@@ -54,16 +54,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for client in clients %}
+                    {% for labor in labors %}
                     <tr class="border-b">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            {{client.clientname}}
+                            {{labor.laborname}}
                         </th>
                         <td class="px-6 py-4">
-                            {{client.contactnumber}}
+                            {{labor.contactnumber}}
                         </td>
                         <td class="px-6 py-4">
-                            {{client.address}}
+                            {{labor.address}}
                         </td>
                         {% endfor %}
                     </tr>

@@ -32,13 +32,14 @@
     <!-- Table -->
     <div class="flex justify-between mt-2 items-center gap-2 flex-wrap">
     <div class="flex gap-2">
+        <a href="/incomingstocks">
         <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-            Purchase stock
-            <img src="{% static  'images/Plus.svg' %}" alt="plus">
+            Incoming stocks
+            <img src="{% static  'images/Arrow right.svg' %}" alt="plus">
         </button>
-
+        </a>
         <button class="px-2 py-2 bg-[#4AE450] flex items-center rounded-md gap-2 text-slate-50 text-sm font-inter">
-            Materials
+            Add stock
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
         </button>
     </div>
@@ -54,149 +55,34 @@
                             Category
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Quantity
+                            Available stock
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Price
                         </th>
-                        <th scope="col" class="px-6 py-3">
-                            Supplier
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Last Purchase
-                        </th>
-                        <th scope="col" class="px-6 py-3">
+                        <!-- <th scope="col" class="px-6 py-3">
                             Status
-                        </th>
+                        </th> -->
                     </tr>
                 </thead>
                 <tbody>
+                    {% for stock in stocks %}
                     <tr class="border-b">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Apple MacBook Pro 17"
+                            {{stock.productname}}
                         </th>
                         <td class="px-6 py-4">
-                            Silver
+                            {{stock.category}}
                         </td>
                         <td class="px-6 py-4">
-                            Laptop
+                            {{stock.quantity}}
                         </td>
                         <td class="px-6 py-4">
-                            $2999
+                            {{stock.price}}
                         </td>
                     </tr>
-                    <tr class="border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Microsoft Surface Pro
-                        </th>
-                        <td class="px-6 py-4">
-                            White
-                        </td>
-                        <td class="px-6 py-4">
-                            Laptop PC
-                        </td>
-                        <td class="px-6 py-4">
-                            $1999
-                        </td>
-                    </tr>
-                    <tr class=" border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">
-                            Black
-                        </td>
-                        <td class="px-6 py-4">
-                            Accessories
-                        </td>
-                        <td class="px-6 py-4">
-                            $99
-                        </td>
-                    </tr>
-                    <tr class=" border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">
-                            Black
-                        </td>
-                        <td class="px-6 py-4">
-                            Accessories
-                        </td>
-                        <td class="px-6 py-4">
-                            $99
-                        </td>
-                    </tr>
-                    <tr class=" border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">
-                            Black
-                        </td>
-                        <td class="px-6 py-4">
-                            Accessories
-                        </td>
-                        <td class="px-6 py-4">
-                            $99
-                        </td>
-                    </tr>
-                    <tr class=" border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">
-                            Black
-                        </td>
-                        <td class="px-6 py-4">
-                            Accessories
-                        </td>
-                        <td class="px-6 py-4">
-                            $99
-                        </td>
-                    </tr>
-                    <tr class=" border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">
-                            Black
-                        </td>
-                        <td class="px-6 py-4">
-                            Accessories
-                        </td>
-                        <td class="px-6 py-4">
-                            $99
-                        </td>
-                    </tr>
-                    <tr class=" border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">
-                            Black
-                        </td>
-                        <td class="px-6 py-4">
-                            Accessories
-                        </td>
-                        <td class="px-6 py-4">
-                            $99
-                        </td>
-                    </tr>
-                    <tr class=" border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">
-                            Black
-                        </td>
-                        <td class="px-6 py-4">
-                            Accessories
-                        </td>
-                        <td class="px-6 py-4">
-                            $99
-                        </td>
-                    </tr>
+                    {% endfor %}
+                    
                 </tbody>
             </table>
         </div>

@@ -19,7 +19,7 @@
     </div>
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div>
-            <p class="font-inter font-semibold text-xl">Billing</p> 
+            <p class="font-inter font-semibold text-xl">Review Bill</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p>21,April,2024</p>
@@ -54,12 +54,6 @@
                 </div>
             </div>
 
-            <!-- <div class="w-full">
-                <label for="date" class="block text-sm font-medium leading-6 text-gray-900">Sales date</label>
-                <div class="mt-1">
-                  <input id="date" name="date" type="date"  required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 date">
-                </div>
-            </div> -->
         </div>
         <div class="w-full mt-4">
             <label for="items" class="block text-sm font-medium leading-6 text-gray-900">Items</label>
@@ -110,7 +104,7 @@
         </div>
         <div class="flex gap-2 mt-4">
             <button data-status="false" class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm genbill">
-                Generate Bill
+                Modify Bill
                 <img src="{% static  'images/Plus.svg' %}" alt="plus">
             </button>
 
@@ -122,6 +116,8 @@
     </form>
     <p class="misc hidden">{{products}}</p>
     <p class="misc hidden">{{clients}}</p>
+    <p class="misc hidden">{{items}}</p>
+    <p class="misc hidden">{{customer}}</p>
     </main>
 </section>
 <script>
@@ -129,6 +125,7 @@
     const misc = document.querySelectorAll('.misc')
     const stockdata = JSON.parse(misc[0].innerHTML)
     const clientdata = JSON.parse(misc[1].innerHTML)
+    const editinfo = JSON.parse(misc[2].innerHTML)
 
     //DOM Attributes
     const customer = document.querySelector('.customername')
@@ -152,7 +149,6 @@
 
     // DOM Error presenters
     const customer_err = document.querySelector('.customer_err')
-    
 
     //Internal tracking for autocompletion feature
     const trackset = new Set()
@@ -166,6 +162,74 @@
 
 
     // **Main
+
+    // Pre-Intializing form
+    customer.value = misc[3].innerText
+
+    editinfo.items.forEach(e=>
+    {
+        const product = _getproductinfo(e[0])
+        
+        const th = document.createElement('th')
+        th.innerText = e[0]
+        th.setAttribute('scope', 'row')
+        th.setAttribute('class', 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap')
+
+        const tr = document.createElement('tr')
+        tr.setAttribute('scope', 'row')
+        tr.setAttribute('class', 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap')
+
+        // Remove Button
+        const removebtn_row = document.createElement('td')
+        const removebtn = document.createElement('img')
+        removebtn.setAttribute('class', 'px-4 py-4')
+        removebtn.setAttribute('src', '{% static "images/Remove.svg" %}')
+        removebtn.style.cursor = 'pointer'
+        removebtn.addEventListener('click', remove_prod)
+        removebtn_row.append(removebtn)
+
+        // Quantity Column
+        const quantity_row = document.createElement('td')
+        const quantity_input = document.createElement('input')
+        quantity_input.value = e[1]
+        quantity_input.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
+        quantity_input.setAttribute('placeholder', 'Quantity')
+        quantity_input.addEventListener('input', _quantitypricing)
+        quantity_row.append(quantity_input)
+
+        // Available stock column
+        const instock_row = document.createElement('td')
+        const instock = document.createElement('p')
+        instock.setAttribute('class', 'px-6 py-4')
+        instock.innerText = product.quantity 
+
+        instock_row.append(instock)
+        
+        // Pricing Column
+        const price_row = document.createElement('td')
+        const price = document.createElement('p')
+        price.setAttribute('class', 'px-6 py-4')
+        price.innerText = product.price
+
+        priceset.push([product.productname,product.price])
+        price_row.append(price)
+
+        tr.append(removebtn_row)   
+        tr.append(th)   
+        tr.append(quantity_row)  
+        tr.append(instock_row)
+        tr.append(price)
+        
+        table.append(tr)
+        
+        
+        console.log(product.productname, e[1])
+        _quantitypricing(null, product.productname, e[1])
+        console.log(priceset)
+        _updateprice()
+    })
+
+
 
     // Autocomplete for Customer Name Input
     customer.addEventListener('input', ()=>{
@@ -338,9 +402,7 @@
         Form.append("discount", discountvalue)
         Form.append("subtotal", subtotalvalue)
         Form.append("grandtotal", grandtotalvalue)
-
-        console.log(Form)
-        fetch('http://127.0.0.1:8000/newbill/',{
+        fetch('http://127.0.0.1:8000/reviewbill/' + '{{bill.id}}/',{
             method: 'POST',
             body: Form
         })
@@ -360,9 +422,23 @@
 
     // Handles event listeners on quantity, removes pricing when arguments are present
     function _quantitypricing(e, productname=null, quantity=null) {
-        console.log(priceset)
-        priceset.forEach(i=>{
-            console.log('sdsd', e.target.parentNode.parentNode.childNodes[1].innerText)
+        console.log('called')
+        if (productname!=null)
+        {
+            console.log("hola")
+            const prod = _getproductinfo(productname)
+            priceset.forEach(i=>{
+                // console.log('asdas',productname, i[0])
+            if (i[0] === productname)
+            {
+                i[1] = (prod.price*quantity)
+            }
+        })
+        }
+        else
+        {
+            console.log('lslsl')
+            priceset.forEach(i=>{
             if (i[0] === e.target.parentNode.parentNode.childNodes[1].innerText)
             {
                 console.log("inif", e.target.value)
@@ -371,6 +447,7 @@
 
             }
         })
+        }
         _updateprice()
     }
 
