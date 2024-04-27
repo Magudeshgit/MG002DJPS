@@ -60,15 +60,15 @@
                             {{labor.laborname}}
                             </a>
                         </th>
-                        <td class="px-6 py-4">
                             {% for attended in attendance %}
+                            <td class="px-6 py-4">
                                 {% if labor.laborname in attended.absent %}
                                 <input type="checkbox" disabled name="" class="rounded-md attendance" data-laborname="{{labor.laborname}}">
                                 {% else %}
                                 <input type="checkbox" disabled checked name="" class="rounded-md attendance" data-laborname="{{labor.laborname}}">
                                 {% endif %}
+                            </td>
                             {% endfor %}
-                        </td>
                     </tr>
                     
                     {% endfor %}

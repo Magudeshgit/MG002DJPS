@@ -18,6 +18,26 @@
     {% include 'core/navigation.html' %}
     </div>
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
+
+
+        <!-- Toast message -->
+        <div id="toast-success" class="absolute toast right-0 top-0 z-10 hidden items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert" onload="toastMessage()">
+            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                </svg>
+                <span class="sr-only">Check icon</span>
+            </div>
+            <div class="ms-3 text-sm font-normal response-txt">Bill generated successfully/div>
+            <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">
+                <span class="sr-only">Close</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+            </button>
+        </div>
+
+
         <div>
             <p class="font-inter font-semibold text-xl">Billing</p> 
         </div>
@@ -66,6 +86,7 @@
             <div class="mt-1">
               <input id="items" list="products" name="items" type="text" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products">
               <datalist id="products" class="bg-gray-50  text-gray-900 text-sm rounded-lg flex flex-col"></datalist>
+                <p class="text-xs text-red-600 quantity_err"></p>
             </div>
         </div>
 
@@ -122,6 +143,7 @@
     </form>
     <p class="misc hidden">{{products}}</p>
     <p class="misc hidden">{{clients}}</p>
+    <p class="misc hidden">{{error}}</p>
     </main>
 </section>
 <script>
@@ -147,11 +169,16 @@
     const form = document.querySelector('.form')
     const genbill = document.querySelector('.genbill')
     const closebill = document.querySelector('.closebill')
+
+    const toast = document.querySelector('.toast')
+    const response_txt = document.querySelector('.response-txt')
+    
     genbill.addEventListener('click', formhandler)
     closebill.addEventListener('click', formhandler)
 
     // DOM Error presenters
     const customer_err = document.querySelector('.customer_err')
+    const quantity_err = document.querySelector('.quantity_err')
     
 
     //Internal tracking for autocompletion feature
@@ -237,6 +264,8 @@
         quantity_input.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
         quantity_input.setAttribute('placeholder', 'Quantity')
         quantity_input.setAttribute('type', 'number')
+        quantity_input.setAttribute('min', '1')
+        quantity_input.setAttribute('m', productobj.quantity)
         quantity_input.addEventListener('input', _quantitypricing)
         quantity_row.append(quantity_input)
 
@@ -320,31 +349,46 @@
 
     function formhandler(e){
         e.preventDefault()
-        _formvalidator(form)
+        
 
         const Form = new FormData(form)
         const itemdata = new Array()
 
         table.childNodes.forEach(e=>{
             payload.push([e.childNodes[1].innerText,e.childNodes[2].childNodes[0].value])
-        
         })
 
         // Appending data manually to post payload
         if (_formvalidator() === false) return;
-        Form.append("items", JSON.stringify(payload))
-        Form.append("customer", customer.value)
-        Form.append("billstatus", e.target.dataset.status)
-        Form.append("discount", discountvalue)
-        Form.append("subtotal", subtotalvalue)
-        Form.append("grandtotal", grandtotalvalue)
+        else
+        {
+            console.log(_formvalidator())
+            Form.append("items", JSON.stringify(payload))
+            Form.append("customer", customer.value)
+            Form.append("billstatus", e.target.dataset.status)
+            Form.append("discount", discountvalue)
+            Form.append("subtotal", subtotalvalue)
+            Form.append("grandtotal", grandtotalvalue)
 
-        console.log(Form)
-        fetch(document.location.origin+'/newbill/',{
-            method: 'POST',
-            body: Form
-        })
-        location.reload()
+            console.log(Form)
+            let response = fetch(document.location.origin+'/newbill/',{
+                method: 'POST',
+                body: Form
+            })
+            response.then(e=>{
+                if (e.status == 200)
+                {
+                    toast.style.display = 'flex'
+                    location.reload()
+                }
+                else
+                {
+                    toast.style.display = 'flex'
+                    response_txt.innerText = 'Server Error!'
+                }
+            })
+        }
+        // location.reload()
     }
 
     // **Dependency functions
@@ -376,13 +420,35 @@
     }
 
     function _formvalidator() {
+        customer_err.innerText = ''
+        quantity_err.innerText = ''
         if (customer.value === '')
         { 
             customer_err.innerText = 'Please fill out this field'
             return false
         }
+        // if (
+        // payload.forEach(e=>{
+        //     console.log(e)
+        //     if (e[1] > _getproductinfo(e[0]).quantity)
+        //     {
+        //         quantity_err.innerText = 'quantity exceeds available stock of ' + e[0]
+        //         return false
+        //     }
+        // }) === false)
+        // {
+        //     // payload = []
+        //     return false
+        // }
+        for (let index = 0; index < payload.length; index++) {
+            if (payload[index][1] > _getproductinfo(payload[index][0]).quantity)
+            {
+                quantity_err.innerText = 'quantity exceeds available stock of ' + payload[index][0]
+                payload.pop(payload[index])
+                return false
+            }
+        }
         return true
-
     }
 </script>
 </body>

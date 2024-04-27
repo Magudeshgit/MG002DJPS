@@ -60,6 +60,7 @@
             <div class="mt-1">
               <input id="items" list="products" name="items" type="text" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products">
               <datalist id="products" class="bg-gray-50  text-gray-900 text-sm rounded-lg flex flex-col"></datalist>
+              <p class="quantity_err text-xs text-red-500"></p>
             </div>
         </div>
 
@@ -149,6 +150,7 @@
 
     // DOM Error presenters
     const customer_err = document.querySelector('.customer_err')
+    const quantity_err = document.querySelector('.quantity_err')
 
     //Internal tracking for autocompletion feature
     const trackset = new Set()
@@ -169,6 +171,8 @@
     editinfo.items.forEach(e=>
     {
         const product = _getproductinfo(e[0])
+
+        trackset.add(e[0])
         
         const th = document.createElement('th')
         th.innerText = e[0]
@@ -395,17 +399,33 @@
         })
 
         // Appending data manually to post payload
-        if (_formvalidator() === false) return;
-        Form.append("items", JSON.stringify(payload))
-        Form.append("customer", customer.value)
-        Form.append("billstatus", e.target.dataset.status)
-        Form.append("discount", discountvalue)
-        Form.append("subtotal", subtotalvalue)
-        Form.append("grandtotal", grandtotalvalue)
-        fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
-            method: 'POST',
-            body: Form
-        })
+        if (e.target.dataset.status === 'true')
+        {
+            Form.append("items", JSON.stringify(payload))
+            Form.append("customer", customer.value)
+            Form.append("billstatus", e.target.dataset.status)
+            Form.append("discount", discountvalue)
+            Form.append("subtotal", subtotalvalue)
+            Form.append("grandtotal", grandtotalvalue)
+            fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
+                method: 'POST',
+                body: Form
+            })
+        }
+        else  
+        {
+            if (_formvalidator() === false) return;
+            Form.append("items", JSON.stringify(payload))
+            Form.append("customer", customer.value)
+            Form.append("billstatus", e.target.dataset.status)
+            Form.append("discount", discountvalue)
+            Form.append("subtotal", subtotalvalue)
+            Form.append("grandtotal", grandtotalvalue)
+            fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
+                method: 'POST',
+                body: Form
+            })
+        }
     }
 
     // **Dependency functions
@@ -455,6 +475,17 @@
         if (customer.value === '')
         { 
             customer_err.innerText = 'Please fill out this field'
+            return false
+        }
+        if (
+        payload.forEach(e=>{
+            if (e[1] > _getproductinfo(e[0]).quantity)
+            {
+                quantity_err.innerText = 'quantity exceeds available stock of ' + e[0]
+                return false
+            }
+        }) === false)
+        {
             return false
         }
         return true

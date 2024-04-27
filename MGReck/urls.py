@@ -44,6 +44,8 @@ urlpatterns = [
     path('attendance/', cvs.attendancemanagement),
     path('attendancerecord/', cvs.attendancerecords),
 
+    path('salarymanagement/', cvs.salarymanagement),
+
     # Email Verification & Password Reset
     path('activate/<str:uidb64>/<str:token>/', avs.activation, name='activate'),
     path('verificationsuccess/', avs.verificationsuccess),
@@ -55,3 +57,5 @@ urlpatterns = [
     path('forgotpassword/resetsuccess', PasswordResetView.as_view(template_name='authentication/passwordresetsuccess.html'), name='password_reset_complete'),
 
 ]
+
+

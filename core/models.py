@@ -6,9 +6,9 @@ import json
 class stock(models.Model):
     productname = models.CharField(max_length=70, db_index=True)
     category = models.CharField(max_length=50)
-    maximumstock = models.IntegerField()
-    quantity = models.IntegerField()
-    price = models.IntegerField()
+    maximumstock = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField()
+    price = models.PositiveIntegerField()
 
     def __str__(self):
         return self.productname
@@ -55,6 +55,8 @@ class labor(models.Model):
     contactnumber = models.CharField(max_length=20)
     address = models.TextField()
     salarystatus = models.BooleanField(default=False)
+    day_wage = models.PositiveIntegerField(blank=True)
+    salary_amount = models.PositiveBigIntegerField(blank=True)
 
     def __str__(self):
         return self.laborname
@@ -71,4 +73,3 @@ class attendance(models.Model):
         for i in self.absentees.all():
             a.append(i.laborname)
         return a
-    

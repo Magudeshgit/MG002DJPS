@@ -11,7 +11,8 @@ def home(request):
     return HttpResponse("Home page")
 @login_required(login_url='/auth/signup/')
 def dashboard(request):
-    model = stock.objects.all().order_by('productname')
+    model = stock.objects.all()
+    ovdc = model.order_by('productname')
     model_bills = bill.objects.all()
     ic_stock  = 0
     for i in model:
@@ -21,7 +22,7 @@ def dashboard(request):
     
 
     context = {
-        'overviewdata':model.reverse()[:5],
+        'overviewdata':ovdc.reverse()[:5],
         'stockcount': model.count(),
         'iccount': ic_stock,
         'billcount': model_bills.count(),
@@ -149,6 +150,12 @@ def deletelabor(request,pk):
     cust.delete()
     return redirect('/laborbook')
 
+def salarymanagement(request):
+    labordata = labor.objects.all()
+    attendances = attendance.objects.all()
+    context = {"labordata": labordata, "attendances": attendances}
+    return render(request, 'core/salarymanagement.html', context)
+
 def bills(request):
     _bill = reversed(bill.objects.all())
     
@@ -202,6 +209,14 @@ def reviewbill(request,pk=None):
         jsondata = json.dumps(jsondata)
 
         # Handling Central Stock
+
+        _customer = client.objects.get(clientname=customer)
+        obj = bill.objects.get(id=pk)
+        obj.products=jsondata
+        obj.grandtotal=int(grandtotal)
+        obj.billstatus = True
+        obj.client = _customer
+
         if billstatus == 'false':
             for i in items:
                 _product = stock.objects.get(productname=i[0])
@@ -211,14 +226,10 @@ def reviewbill(request,pk=None):
             for i in items:
                 _product = stock.objects.get(productname=i[0])
                 _product.quantity = _product.quantity + int(i[1])
+                obj.billstatus = True
                 _product.save()
-
-        _customer = client.objects.get(clientname=customer)
-        obj = bill.objects.get(id=pk)
-        obj.products=jsondata
-        obj.grandtotal=int(grandtotal)
-        obj.client.add(_customer)
         obj.save()
+
         return redirect('/bills')
 
     clients = client.objects.values_list('clientname')
