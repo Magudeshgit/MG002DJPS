@@ -7,5 +7,6 @@ admin.site.register([stock,
                      client,
                      bill,
                      labor,
-                     attendance
+                     attendance,
+                     salarymanagement
                      ])

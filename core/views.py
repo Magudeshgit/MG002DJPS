@@ -2,8 +2,9 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import stock, client, bill, labor, attendance
+from .models import salarymanagement as salaryobj
 from django.utils import timezone
-from django.db.models import Count
+from django.db.models import Sum
 import json
 
 
@@ -26,6 +27,7 @@ def dashboard(request):
         'stockcount': model.count(),
         'iccount': ic_stock,
         'billcount': model_bills.count(),
+        'salarydue': salaryobj.objects.aggregate(Sum('salarydue'))['salarydue__sum']
         }
     
     return render(request, "core/dashboard.html", context)   
@@ -120,13 +122,22 @@ def addlabor(request):
         _laborname = request.POST.get('laborname')
         _contact = request.POST.get('contact')
         _address = request.POST.get('address')
+        _daywage = request.POST.get('daywage')
+        _salary = request.POST.get('salary')
 
-        labor.objects.create(
+        laborobj = labor.objects.create(
             laborname=_laborname,
             contactnumber=_contact,
-            address = _address
+            address = _address,
+            day_wage=_daywage,
+            salary_amount=_salary
         )
-
+        
+        opb = salaryobj.objects.create(
+            employee=laborobj,
+            absentdays=0,
+            salarydue = _salary
+        )
         created=True
     return render(request, "core/addlabor.html", {'created':created})
 
@@ -151,9 +162,12 @@ def deletelabor(request,pk):
     return redirect('/laborbook')
 
 def salarymanagement(request):
-    labordata = labor.objects.all()
-    attendances = attendance.objects.all()
-    context = {"labordata": labordata, "attendances": attendances}
+    salary = salaryobj.objects.all()
+    context = {
+        'salary':salary,
+        'salsum': salary.aggregate(Sum('salarydue'))['salarydue__sum'],
+        'labcount': labor.objects.all().count()
+        }
     return render(request, 'core/salarymanagement.html', context)
 
 def bills(request):
@@ -251,14 +265,21 @@ def laborbook(request):
     return render(request, "core/laborbook.html", {'labors': labors})
 
 def attendancemanagement(request):
+    print(timezone.now())
     attendances, status = attendance.objects.get_or_create(date=timezone.now())
+
     labors = labor.objects.all()
     if request.method=='POST':
         _absentees = request.POST.get('absentees')
         _absentees = json.loads(_absentees)
         attendances.absentees.clear()
         for i in _absentees:
-            attendances.absentees.add(labors.get(laborname=i))
+            _labor = labors.get(laborname=i)
+            attendances.absentees.add(_labor)
+            sal = salaryobj.objects.get(employee=_labor)
+            sal.absentdays+=1
+            sal.save()
+
     return render(request, "core/attendancemanagement.html", {'attendance': attendances, 'labors':labors, 'status':status})
 
 def attendancerecords(request):

@@ -17,7 +17,7 @@
             <p class="font-inter font-semibold text-xl">Salary Management</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
-            <p>21,April,2024</p>
+            <p class="date"></p>
             <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
                 <p class="text-slate-300">M</p>
             </div>
@@ -49,15 +49,15 @@
         </a>
     </div> -->
     <main class="w-full h-full">
-        <div class="statuscontainer max-w-[900px] px-4 py-[50px] flex justify-evenly items-center bg-white shadow-md rounded-md">
+        <div class="statuscontainer flex-wrap gap-4 max-w-[900px] px-4 py-[50px] flex justify-evenly items-center bg-white shadow-md rounded-md">
             <div>
                 <p class="text-xs font-inter">Pending Salary Amount</p>
-                <p class="text-2xl font-semibold">2000</p>
+                <p class="text-2xl font-semibold">₹{{salsum}}</p>
             </div>
             <span class="w-[1px] h-[50px] bg-slate-700 rounded-md"></span>
             <div>
                 <p class="text-xs">No Of Labors</p>
-                <p class="text-2xl font-semibold">20</p>
+                <p class="text-2xl font-semibold">{{labcount}}</p>
             </div>
             <span class="w-[1px] h-[50px] bg-slate-700 rounded-md"></span>
             <div>
@@ -83,21 +83,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for i in labordata %}
-                                {% for attended in attendances %}
+                            {% for i in salary %}
                             <tr class="border-b">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     <a href="{% url 'editcustomer' i.id%}" class="hover:underline">
-                                    {{i.laborname}}
+                                    {{i.employee}}
                                     </a>
                                 </th>
                                 <td class="px-6 py-4">
-                                    {{attended.absent}}
+                                    {{i.absentdays}}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{i}}
+                                    {{i.salarydue}}
                                 </td>
-                                {% endfor %}
                                 {% endfor %}
                             </tr>
                         </tbody>
@@ -106,5 +104,10 @@
 
     </main>
     </section> 
+    <script>
+        date = document.querySelector('.date')
+        const dt = new Date().toDateString().split(' ')
+        date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
+    </script>
 </body>
 </html>

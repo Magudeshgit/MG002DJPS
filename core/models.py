@@ -73,3 +73,11 @@ class attendance(models.Model):
         for i in self.absentees.all():
             a.append(i.laborname)
         return a
+    
+class salarymanagement(models.Model):
+    employee = models.ForeignKey(labor, on_delete=models.CASCADE)
+    absentdays = models.PositiveIntegerField(default=0, blank=True)
+    salarydue = models.PositiveIntegerField(blank=True)
+
+    def __str__(self):
+        return str(self.employee)

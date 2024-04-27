@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('auth/signup/', avs.signup),
     path('auth/signin/', avs.signin),
+    path('auth/logout/', avs.logout_user),
 
     # Core Functionalities
     path('dashboard/', cvs.dashboard),

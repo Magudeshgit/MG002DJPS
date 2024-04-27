@@ -25,7 +25,7 @@
             <p class="font-inter font-semibold text-xl">Dashboard</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
-            <p>21,April,2024</p>
+            <p class="date">21,April,2024</p>
             <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
                 <p class="text-slate-300">M</p>
             </div>
@@ -48,10 +48,10 @@
         </div>
         </a>    
 
-        <a href="/salary" class="w-[420px] max-h-[115px]">
+        <a href="/salarymanagement" class="w-[420px] max-h-[115px]">
         <div class="box max-w-full p-5 bg-gradient-to-r from-[#BEE6A1] to-[#E0F3D6] rounded-md hover:scale-105 transition duration-500">
             <p class="text-xs">Pending Salary</p>
-            <p class="text-2xl font-semibold">₹20,000</p>
+            <p class="text-2xl font-semibold">₹{{salarydue}}</p>
         </div>
         </a>
 
@@ -72,11 +72,12 @@
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
         </button>
         </a>
-
+        <a href="/addstock">
         <button class="px-2 py-2 bg-[#4AE450] flex items-center rounded-md gap-2 text-slate-50 text-sm font-inter">
             Add Stock
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
         </button>
+        </a>
     </div>
     </div>
         <div class="relative max-w-[100%] overflow-x-scroll mt-4 rounded-md">
@@ -132,6 +133,11 @@
             </table>
         </div>
     </main>
+    <script>
+        date = document.querySelector('.date')
+        const dt = new Date().toDateString().split(' ')
+        date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
+    </script>
 </section>
 </body>
 </html>

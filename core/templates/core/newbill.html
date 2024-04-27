@@ -42,7 +42,7 @@
             <p class="font-inter font-semibold text-xl">Billing</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
-            <p>21,April,2024</p>
+            <p class="date"></p>
             <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
                 <p class="text-slate-300">M</p>
             </div>
@@ -370,7 +370,7 @@
             Form.append("subtotal", subtotalvalue)
             Form.append("grandtotal", grandtotalvalue)
 
-            console.log(Form)
+            // console.log(Form)
             let response = fetch(document.location.origin+'/newbill/',{
                 method: 'POST',
                 body: Form

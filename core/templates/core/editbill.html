@@ -22,7 +22,7 @@
             <p class="font-inter font-semibold text-xl">Review Bill</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
-            <p>21,April,2024</p>
+            <p class="date"></p>
             <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
                 <p class="text-slate-300">M</p>
             </div>
@@ -147,6 +147,11 @@
     const closebill = document.querySelector('.closebill')
     genbill.addEventListener('click', formhandler)
     closebill.addEventListener('click', formhandler)
+
+    
+    date = document.querySelector('.date')
+    const dt = new Date().toDateString().split(' ')
+    date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
 
     // DOM Error presenters
     const customer_err = document.querySelector('.customer_err')
@@ -407,9 +412,22 @@
             Form.append("discount", discountvalue)
             Form.append("subtotal", subtotalvalue)
             Form.append("grandtotal", grandtotalvalue)
-            fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
+            let response = fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
                 method: 'POST',
                 body: Form
+            })
+
+            response.then(e=>{
+                if (e.status == 200)
+                {
+                    toast.style.display = 'flex'
+                    location.reload()
+                }
+                else
+                {
+                    toast.style.display = 'flex'
+                    response_txt.innerText = 'Server Error!'
+                }
             })
         }
         else  

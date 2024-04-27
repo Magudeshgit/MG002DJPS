@@ -22,7 +22,7 @@
             <p class="font-inter font-semibold text-xl">Bills</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
-            <p>21,April,2024</p>
+            <p class="date"></p>
             <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
                 <p class="text-slate-300">M</p>
             </div>
@@ -82,5 +82,10 @@
         </div>
     </main>
 </section>
+<script>
+    date = document.querySelector('.date')
+        const dt = new Date().toDateString().split(' ')
+        date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
+</script>
 </body>
 </html>
