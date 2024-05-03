@@ -17,7 +17,26 @@
     <div class="relative"> 
     {% include 'core/navigation.html' %}
     </div>
-    <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
+    <div class="flex justify-between relative w-full items-center sm:mt-12 mt-6">
+
+        <!-- Toast message -->
+        <div id="toast-success" class="absolute toast right-0 top-0 z-10 hidden items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert" onload="toastMessage()">
+            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                </svg>
+                <span class="sr-only">Check icon</span>
+            </div>
+            <div class="ms-3 text-sm font-normal response-txt">Bill generated successfully/div>
+            <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">
+                <span class="sr-only">Close</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+            </button>
+        </div>
+
+
         <div>
             <p class="font-inter font-semibold text-xl">Review Bill</p> 
         </div>
@@ -84,6 +103,12 @@
                         <th scope="col" class="px-6 py-3">
                             Price
                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            Date Rented
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Total Rented Days
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="tablewrapper">
@@ -147,6 +172,8 @@
     const closebill = document.querySelector('.closebill')
     genbill.addEventListener('click', formhandler)
     closebill.addEventListener('click', formhandler)
+
+    const toast = document.querySelector('.toast')
 
     
     date = document.querySelector('.date')
@@ -223,11 +250,38 @@
         priceset.push([product.productname,product.price])
         price_row.append(price)
 
+        // Date Rented
+        const date_row = document.createElement('td')
+        const date = document.createElement('input')
+        date.value = e[2]
+        console.log("asd", e[2])
+        date.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
+        date.setAttribute('type', 'date')
+        date.setAttribute('value', toDateInputValue(new Date()))
+        date.setAttribute('disabled', true)
+    
+        date_row.append(date)
+
+        // Total Rented Days
+        const rdate_row = document.createElement('td')
+        const rdate = document.createElement('p')
+        rdate.innerText = getDate_Difference(e[2])
+        rdate.setAttribute('type', 'date')
+        rdate.setAttribute('value', toDateInputValue(new Date()))
+        rdate.setAttribute('disabled', true)
+        rdate.setAttribute('class', 'border-none')
+
+        rdate_row.append(rdate)
+
+
         tr.append(removebtn_row)   
         tr.append(th)   
         tr.append(quantity_row)  
         tr.append(instock_row)
         tr.append(price)
+        tr.append(date_row)
+        tr.append(rdate_row)
+
         
         table.append(tr)
         
@@ -421,12 +475,14 @@
                 if (e.status == 200)
                 {
                     toast.style.display = 'flex'
+                    console.log("voila")
                     location.reload()
                 }
                 else
                 {
                     toast.style.display = 'flex'
                     response_txt.innerText = 'Server Error!'
+                    console.log("lksdsl")
                 }
             })
         }
@@ -439,9 +495,23 @@
             Form.append("discount", discountvalue)
             Form.append("subtotal", subtotalvalue)
             Form.append("grandtotal", grandtotalvalue)
-            fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
+            let response = fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
                 method: 'POST',
                 body: Form
+            })
+            response.then(e=>{
+                if (e.status == 200)
+                {
+                    toast.style.display = 'flex'
+                    console.log("voila")
+                    location.reload()
+                }
+                else
+                {
+                    toast.style.display = 'flex'
+                    response_txt.innerText = 'Server Error!'
+                    console.log("lksdsl")
+                }
             })
         }
     }
@@ -508,6 +578,22 @@
         }
         return true
 
+    }
+
+    function toDateInputValue(dateObject){
+        const local = new Date(dateObject);
+        local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
+        return local.toJSON().slice(0,10);
+    };
+
+    function getDate_Difference(olddate)
+    {
+        const currdate = new Date(toDateInputValue(new Date()))
+        const _olddate = new Date(olddate)
+        console.log(olddate, currdate)
+        const timediff = Math.abs(currdate - _olddate)
+        console.log('asas',timediff)
+        return Math.floor( timediff / (1000 * 60 * 60 * 24))
     }
 </script>
 </body>

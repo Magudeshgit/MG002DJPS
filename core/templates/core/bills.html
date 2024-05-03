@@ -39,7 +39,23 @@
         </button>
         </a>
     </div>
+
+    <form method="POST">
+        <div class="searchbar w-full flex gap-3 sm:flex-wrap">
+                {%csrf_token%}
+                <input list="clients" id="customer" name="searchparam" autocomplete="off" type="text" required placeholder="Customer name or Number" class="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
+                <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
+                    Search
+                    <img src="{% static  'images/Search.svg' %}" alt="plus">
+                </button>
+            
+        </div>
+    </form>
+
     </div>
+    {% if bills == None %}
+        <p class="text-xl mt-4">No Results Found!</p>
+    {% else %}  
         <div class="relative max-w-[100%] min-h-full overflow-x-scroll mt-4 rounded-md bg-red-500">
             <table class="text-sm text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md shadow-md overflow-x-auto w-full">
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
@@ -80,6 +96,8 @@
                 </tbody>
             </table>
         </div>
+    {% endif %}
+        
     </main>
 </section>
 <script>

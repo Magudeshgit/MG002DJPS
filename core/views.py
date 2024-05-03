@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import stock, client, bill, labor, attendance
 from .models import salarymanagement as salaryobj
 from django.utils import timezone
-from django.db.models import Sum
+from django.db.models import Sum, Q
 import json
 
 
@@ -171,8 +171,19 @@ def salarymanagement(request):
     return render(request, 'core/salarymanagement.html', context)
 
 def bills(request):
-    _bill = reversed(bill.objects.all())
-    
+    bill_ = bill.objects.all()
+    _bill = reversed(bill_)
+    if request.method == "POST":
+        search_param = request.POST.get("searchparam")
+        c = client.objects.filter(Q(clientname__icontains=search_param) | Q(contactnumber__icontains=search_param))
+        print("Asdad",search_param,c)
+        if len(c) >= 1:
+            searched_bills = bill.objects.filter(Q(client=c[0]))
+            print("search",searched_bills)
+            return render(request, "core/bills.html", {"bills":searched_bills})
+        else:
+            return render(request, "core/bills.html", {"status": {"bills": None}})
+        
     context = {'bills':_bill}
     return render(request, "core/bills.html", context)
 
