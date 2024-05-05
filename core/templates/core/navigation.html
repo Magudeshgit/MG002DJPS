@@ -11,7 +11,7 @@
     <a href="/dashboard">
     <div class="flex gap-2 items-center mb-6 ">
         <img src="{% static 'images/logo1.svg' %}" class="max-w-[40px] drop-shadow-lg">
-        <p class="text-2xl font-semibold">InvenTrove</p>
+        <p class="text-sm font-semibold">ஸ்ரீ வெங்கடேஸ்வரா ஸ்டோர்ஸ்</p>
     </div>
     </a>
 
@@ -19,63 +19,63 @@
         <li>
             <a href="/dashboard" class="flex items-center p-2 text-gray-900 rounded-lgbg-gray-100 group hover:bg-gray-100">
                 <img src="{% static 'images/Home.svg' %}" alt="">
-                <span class="ms-3 text-xs">Dashboard</span>
+                <span class="ms-3 text-xs">டாஷ்போர்டு</span>
             </a>
         </li>
         <li>
             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
                 <img src="{% static 'images/Stack.svg' %}" alt="">
-                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap text-xs">Stocks</span>
+                <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap text-xs">பொருட்கள்</span>
                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                 </svg>
             </button>
             <ul id="dropdown-example" class="hidden py-2 space-y-2 transition duration-75 ">
                 <li>
-                    <a href="/stocks" class="flex items-center w-full p-2 text-gray-900 text-xs transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">All stocks</a>
+                    <a href="/stocks" class="flex items-center w-full p-2 text-gray-900 text-xs transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">அனைத்து பொருட்கள்</a>
                 </li>
                 <li>
-                    <a href="/addstocks" class="flex items-center w-full p-2 text-gray-900 text-xs transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">Add stocks</a>
+                    <a href="/addstock" class="flex items-center w-full p-2 text-gray-900 text-xs transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">பொருட்களை சேர்க்க</a>
                 </li>
                 <li>
-                    <a href="/incomingstocks" class="flex items-center w-full p-2 text-gray-900 text-xs transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">Incoming stocks</a>
+                    <a href="/incomingstocks" class="flex items-center w-full p-2 text-gray-900 text-xs transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">உள்வரும் பொருட்கள்</a>
                 </li>
                 <!-- <li>
                     <a href="/outgoingstocks" class="flex items-center w-full p-2 text-gray-900 text-xs transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">Outgoing stocks</a>
                 </li> -->
-                <li>
+                <!-- <li>
                     <a href="/damagedmaterials" class="flex items-center w-full p-2 text-gray-900 text-xs transition duration-75 rounded-lg pl-11 group hover:bg-gray-100">Damaged materials</a>
-                </li>
+                </li> -->
             </ul>
         </li>
         <li>
             <a href="/bills" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
                 <img src="{% static 'images/Diamond.svg' %}" alt="">
-                <span class="flex-1 ms-3 whitespace-nowrap text-xs">Billing</span>
+                <span class="flex-1 ms-3 whitespace-nowrap text-xs">கணக்குகள்</span>
             </a>
         </li>
         <li>
             <a href="/clientbook" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
                 <img src="{% static 'images/Invoice.svg' %}" alt="">
-                <span class="flex-1 ms-3 whitespace-nowrap text-xs">Client book</span>
+                <span class="flex-1 ms-3 whitespace-nowrap text-xs">வாடிக்கையாளர்கள்</span>
             </a>
         </li>
         <li>
             <a href="/laborbook " class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
                 <img src="{% static 'images/User-plus.svg' %}" alt="">
-                <span class="flex-1 ms-3 whitespace-nowrap text-xs">Labor book</span>
+                <span class="flex-1 ms-3 whitespace-nowrap text-xs">தொழிலாளர்கள்</span>
             </a>
         </li>
         <li>
             <a href="/attendance" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
                 <img src="{% static 'images/Contacts.svg' %}" alt="">
-                <span class="flex-1 ms-3 whitespace-nowrap text-xs">Attendance management</span>
+                <span class="flex-1 ms-3 whitespace-nowrap text-xs">வருகை கணக்கு</span>
             </a>
         </li>
         <li>
             <a href="/salarymanagement" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
                 <img src="{% static 'images/Bank.svg' %}" alt="">
-                <span class="flex-1 ms-3 whitespace-nowrap text-xs">Salary management</span>
+                <span class="flex-1 ms-3 whitespace-nowrap text-xs">சம்பளக்கணக்கு</span>
             </a>
         </li>
         <!-- <li>
@@ -87,7 +87,7 @@
         <li>
             <a href="/auth/logout" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
                 <img src="{% static 'images/Logout.svg' %}" alt="">
-                <span class="flex-1 ms-3 whitespace-nowrap text-xs">Logout</span>
+                <span class="flex-1 ms-3 whitespace-nowrap text-xs">வெளியேறு</span>
             </a>
         </li>
     </ul>

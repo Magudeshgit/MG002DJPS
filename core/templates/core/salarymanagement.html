@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InvenTrove | Add client</title>
+    <title>InvenTrove | Salary Management</title>
     {% tailwind_css %}
 </head>
 <body >
@@ -14,7 +14,7 @@
     </div>
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div>
-            <p class="font-inter font-semibold text-xl">Salary Management</p> 
+            <p class="font-inter font-semibold text-xl">சம்பளக்கணக்கு</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p class="date"></p>
@@ -51,17 +51,18 @@
     <main class="w-full h-full">
         <div class="statuscontainer flex-wrap gap-4 max-w-[900px] px-4 py-[50px] flex justify-evenly items-center bg-white shadow-md rounded-md">
             <div>
-                <p class="text-xs font-inter">Pending Salary Amount</p>
+                <p class="text-xs font-inter">சம்பளம் கணக்கீடு</p>
                 <p class="text-2xl font-semibold">₹{{salsum}}</p>
             </div>
             <span class="w-[1px] h-[50px] bg-slate-700 rounded-md"></span>
             <div>
-                <p class="text-xs">No Of Labors</p>
+                <p class="text-xs">
+                    தொழிலாளர்கள் எண்ணிக்கை</p>
                 <p class="text-2xl font-semibold">{{labcount}}</p>
             </div>
             <span class="w-[1px] h-[50px] bg-slate-700 rounded-md"></span>
             <div>
-                <p class="text-xs">Upcoming Salary Date</p>
+                <p class="text-xs">சம்பள தேதி</p>
                 <p class="text-2xl font-semibold">10,May,2024</p>
             </div>
         </div>
@@ -72,13 +73,13 @@
                         <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
-                                    Labor name
+                                    பெயர் 
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Total absent days
+                                    விடுமுறை எண்ணிக்கை
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Salary due
+                                    சம்பளம்
                                 </th>
                             </tr>
                         </thead>

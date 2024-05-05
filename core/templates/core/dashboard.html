@@ -22,7 +22,7 @@
     <!-- Header Component -->
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div>
-            <p class="font-inter font-semibold text-xl">Dashboard</p> 
+            <p class="font-inter font-semibold text-xl">டாஷ்போர்டு</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p class="date">21,April,2024</p>
@@ -36,45 +36,45 @@
     <div class="infobox flex w-full gap-3 flex-wrap items-center">
         <a href="/stocks" class="w-[420px] max-h-[115px]">
         <div class="box max-w-full p-5 bg-gradient-to-r from-[#C9B4FD] to-[#EBE6FD] rounded-md hover:scale-105 transition duration-500">
-            <p class="text-xs">Total Stocks</p>
+            <p class="text-xs">மொத்த பொருட்கள்</p>
             <p class="text-2xl font-semibold">{{stockcount}}</p>
         </div>
         </a>
         
         <a href="/incomingstocks" class="w-[420px] max-h-[115px]">
         <div class="box max-w-full p-5 bg-gradient-to-r from-[#F6D0A4] to-[#FBEFDF] rounded-md hover:scale-105 transition duration-500">
-            <p class="text-xs">Pending Incoming Stocks</p>
+            <p class="text-xs">உள்வரும் பொருட்கள்</p>
             <p class="text-2xl font-semibold">{{iccount}}</p>
         </div>
         </a>    
 
         <a href="/salarymanagement" class="w-[420px] max-h-[115px]">
         <div class="box max-w-full p-5 bg-gradient-to-r from-[#BEE6A1] to-[#E0F3D6] rounded-md hover:scale-105 transition duration-500">
-            <p class="text-xs">Pending Salary</p>
+            <p class="text-xs">சம்பளம் கணக்கீடு</p>
             <p class="text-2xl font-semibold">₹{{salarydue}}</p>
         </div>
         </a>
 
         <a href="/bills" class="w-[420px] max-h-[115px]">
         <div class="box max-w-full p-5 bg-gradient-to-r from-[#F9C6C8] to-[#FCDFE1] rounded-md hover:scale-105 transition duration-500">
-            <p class="text-xs">Outstanding Bills</p>
+            <p class="text-xs">நிலுவை பில்கள்</p>
             <p class="text-2xl font-semibold">{{billcount}}</p>
         </div>
         </a>
     </div>
     <!-- Table -->
     <div class="flex justify-between mt-6 items-center gap-2 flex-wrap">
-    <p class="font-semibold text-xl underline">Overview</p>
+    <p class="font-semibold text-xl underline">பகுப்பாய்வு</p>
     <div class="flex gap-2">
         <a href="/newbill">
         <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-            New Bill
+            புதிய ரசீது
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
         </button>
         </a>
         <a href="/addstock">
         <button class="px-2 py-2 bg-[#4AE450] flex items-center rounded-md gap-2 text-slate-50 text-sm font-inter">
-            Add Stock
+            பொருட்களை சேர்க்க
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
         </button>
         </a>
@@ -85,19 +85,19 @@
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            Product
+                            பொருட்கள்
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Category
+                            வகை
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Quantity
+                            எண்ணிக்கை
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Price
+                            எண்ணிக்கை
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Status
+                            நிலை
                         </th>
                     </tr>
                 </thead>

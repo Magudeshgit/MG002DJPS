@@ -64,7 +64,7 @@
         <!-- Customer name and email -->
         <div class="flex items-center justify-evenly gap-4 w-full lg:flex-nowrap flex-wrap">
             <div class="w-full">
-                <label for="customer" class="block text-sm font-medium leading-6 text-gray-900">Customer name</label>
+                <label for="customer" class="block text-sm font-medium leading-6 text-gray-900">வாடிக்கையாளர் பெயர்</label>
                 <div class="mt-1">
                   <input list="clients" id="customer" name="customer" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                   <p class="customer_err text-xs text-red-600"></p>
@@ -76,7 +76,7 @@
 
         </div>
         <div class="w-full mt-4" id="items">
-            <label for="items" class="block text-sm font-medium leading-6 text-gray-900">Items</label>
+            <label for="items" class="block text-sm font-medium leading-6 text-gray-900">பொருட்கள் சேர்</label>
             <div class="mt-1">
               <input id="items" list="products" name="items" type="text" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products">
               <datalist id="products" class="bg-gray-50  text-gray-900 text-sm rounded-lg flex flex-col"></datalist>
@@ -93,22 +93,22 @@
                             #
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Product
+                            பொருட்கள்
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Quantity
+                            எண்ணிக்கை
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Available Stock
+                            கையிருப்பு	
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Price
+                            விலை
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Date Rented
+                            வாடகை தேதி
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Total Rented Days
+                            வாடகை நாட்கள்
                         </th>
                     </tr>
                 </thead>
@@ -119,7 +119,7 @@
 
         <!-- Discount -->
         <div class="w-full mt-6" id="discount">
-            <label for="discount" class="block text-sm font-medium leading-6 text-gray-900">Discount (in %)</label>
+            <label for="discount" class="block text-sm font-medium leading-6 text-gray-900">தள்ளுபடி (in %)</label>
             <div class="mt-1">
               <input id="discount" name="customer" type="number"  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
             </div>
@@ -449,11 +449,11 @@
         discountvalue = ((discountpercent/100) * subtotalvalue)
         grandtotalvalue = (subtotalvalue - (discountpercent/100) * subtotalvalue)
 
-        subtotal.innerText = "Subtotal: ₹" + subtotalvalue
+        subtotal.innerText = "கூட்டுத்தொகை: ₹" + subtotalvalue
 
-        discount.innerText = "Discount of "+ discountpercent +"%: ₹" + discountvalue
+        discount.innerText = "தள்ளுபடி "+ discountpercent +"%: ₹" + discountvalue
 
-        grandtotal.innerText = "Grand Total: ₹" + grandtotalvalue
+        grandtotal.innerText = "மொத்தம்: ₹" + grandtotalvalue
     }
 
         // Discount handlers

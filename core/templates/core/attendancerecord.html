@@ -14,7 +14,7 @@
     </div>
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div>
-            <p class="font-inter font-semibold text-xl">Attendance Records</p> 
+            <p class="font-inter font-semibold text-xl">வருகை கணக்கு</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p class="date"></p>
@@ -39,11 +39,11 @@
     <main>
         <div class="today">
             <table class="mt-4 text-sm text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md overflow-x-auto w-full">
-                <p>Today: 22/02/2023</p>
+                <p class="date"></p>
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            Labor name
+                            பெயர்
                         </th>
                         {% for date in attendance %}
                         <th scope="col" class="px-6 py-3">
@@ -82,9 +82,10 @@
     </section>  
 
     <script>
-        date = document.querySelector('.date')
+        date = document.querySelectorAll('.date')
         const dt = new Date().toDateString().split(' ')
         date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
+        date[1].innerText = `இன்று: ${dt[2]},${dt[1]},${dt[3]}`
         
         const form  =  document.querySelector('.form')
         form.addEventListener('submit',(e)=>{

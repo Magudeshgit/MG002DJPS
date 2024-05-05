@@ -14,7 +14,7 @@
     </div>
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div>
-            <p class="font-inter font-semibold text-xl">Add labor</p> 
+            <p class="font-inter font-semibold text-xl">தொழிலாளர்கள் சேர்க்க</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p class="date"></p>
@@ -43,7 +43,7 @@
     <div class="flex gap-2">
         <a href="/laborbook">
         <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-            All labor
+            தொழிலாளர்கள்
             <img src="{% static  'images/Arrow right.svg' %}" alt="plus">
         </button>
         </a>
@@ -52,7 +52,7 @@
         <form method="POST" class="max-w-[900px] h-full mt-4 p-4 bg-white rounded-md shadow-md form">
             {% csrf_token %}
             <div class="w-full">
-                <label for="customername" class="block text-sm font-medium leading-6 text-gray-900">Labor name</label>
+                <label for="customername" class="block text-sm font-medium leading-6 text-gray-900">பெயர்</label>
                 <div class="mt-1">
                   <input id="customer" name="laborname" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                   <p class="customer_err text-xs text-red-600"></p>
@@ -60,7 +60,7 @@
             </div>
 
             <div class="w-full mt-2">
-                <label for="contact" class="block text-sm font-medium leading-6 text-gray-900">Contact</label>
+                <label for="contact" class="block text-sm font-medium leading-6 text-gray-900">தொடர்பு எண்</label>
                 <div class="mt-1">
                   <input id="contact" name="contact" autocomplete="off" type="number" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                   <p class="customer_err text-xs text-red-600"></p>
@@ -68,7 +68,7 @@
             </div>
 
             <div class="w-full mt-2">
-                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Address</label>
+                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">முகவரி</label>
                 <div class="mt-1">
                   <input id="category" name="address" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                   <p class="customer_err text-xs text-red-600"></p>
@@ -76,14 +76,14 @@
             </div>
 
             <div class="w-full mt-2">
-                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Per day wage</label>
+                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">நாள் கூலி</label>
                 <div class="mt-1">
                   <input id="category" name="daywage" autocomplete="off" type="number" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                 </div>
             </div>
 
             <div class="w-full mt-2">
-                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Salary</label>
+                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">மாத சம்பளம்</label>
                 <div class="mt-1">
                   <input id="category" name="salary" autocomplete="off" type="number" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                 </div>
@@ -91,7 +91,7 @@
 
             <div class="flex gap-2 mt-4">
                 <button class="px-2 py-2 bg-[#4ae450] flex items-center rounded-md text-slate-50 text-sm">
-                    Add labor
+                    சேர்
                     <img src="{% static  'images/Plus.svg' %}" alt="plus">
                 </button>
             </div>

@@ -14,7 +14,7 @@ def home(request):
 def dashboard(request):
     model = stock.objects.all()
     ovdc = model.order_by('productname')
-    model_bills = bill.objects.all()
+    model_bills = bill.objects.filter(billstatus=False)
     ic_stock  = 0
     for i in model:
         if i.quantity < i.maximumstock:
