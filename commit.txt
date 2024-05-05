@@ -1,3 +1,9 @@
+Billing page - Bugfixes
+
+Search functionality - done
+
+Date wise managing of products - done
+
 create stock - done
 
 Edit stock - done

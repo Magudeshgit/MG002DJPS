@@ -22,6 +22,8 @@ urlpatterns = [
     path('incomingstocks/', cvs.incomingstocks),
     path('damagedmaterials/', cvs.damagedmaterials),
 
+    path('print/', cvs.prindoc),
+
     path('newbill/', cvs.newbill),
     path('bills/', cvs.bills),
     path('reviewbill/', cvs.reviewbill, name='bill'),
