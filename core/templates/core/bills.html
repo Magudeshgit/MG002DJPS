@@ -19,7 +19,7 @@
     </div>
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div>
-            <p class="font-inter font-semibold text-xl">Bills</p> 
+            <p class="font-inter font-semibold text-xl">கணக்குகள்</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p class="date"></p>
@@ -34,7 +34,7 @@
     <div class="flex gap-2">
         <a href="/newbill">
         <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-            New Bill
+            புதிய ரசீது
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
         </button>
         </a>
@@ -43,9 +43,9 @@
     <form method="POST">
         <div class="searchbar w-full flex gap-3 sm:flex-wrap">
                 {%csrf_token%}
-                <input list="clients" id="customer" name="searchparam" autocomplete="off" type="text" required placeholder="Customer name or Number" class="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
+                <input list="clients" id="customer" name="searchparam" autocomplete="off" type="text" required placeholder="வாடிக்கையாளர் பெயர்/எண்" class="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                 <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-                    Search
+                    தேடு
                     <img src="{% static  'images/Search.svg' %}" alt="plus">
                 </button>
             
@@ -61,13 +61,13 @@
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            Bills
+                            ரசீது
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Status
+                            நிலை
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Amount
+                            விலை
                         </th>
                     </tr>
                 </thead>

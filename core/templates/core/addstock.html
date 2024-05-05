@@ -14,7 +14,7 @@
     </div>
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div>
-            <p class="font-inter font-semibold text-xl">Add stock</p> 
+            <p class="font-inter font-semibold text-xl">பொருட்களை சேர்க்க</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p class="date"></p>
@@ -23,15 +23,15 @@
             </div>
         </div>
         {% if created %}
-        <div id="toast-success" class="absolute right-0 top-0 z-10 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert" onload="toastMessage()">
-            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+        <div id="toast-success" class="absolute right-0 top-0 z-10 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow" role="alert" onload="toastMessage()">
+            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg">
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
                 </svg>
                 <span class="sr-only">Check icon</span>
             </div>
             <div class="ms-3 text-sm font-normal">Item added successfully.</div>
-            <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">
+            <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8" data-dismiss-target="#toast-success" aria-label="Close">
                 <span class="sr-only">Close</span>
                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -43,7 +43,7 @@
     <div class="flex gap-2">
         <a href="/stocks">
         <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-            View all stocks
+                அனைத்து  பொருட்கள்
             <img src="{% static  'images/Arrow right.svg' %}" alt="plus">
         </button>
         </a>
@@ -52,7 +52,7 @@
         <form method="POST" class="max-w-[900px] h-full mt-4 p-4 bg-white rounded-md shadow-md form">
             {% csrf_token %}
             <div class="w-full">
-                <label for="productname" class="block text-sm font-medium leading-6 text-gray-900">Item name</label>
+                <label for="productname" class="block text-sm font-medium leading-6 text-gray-900">பொருள்</label>
                 <div class="mt-1">
                   <input id="productname" name="productname" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                   <p class="customer_err text-xs text-red-600"></p>
@@ -60,15 +60,15 @@
             </div>
 
             <div class="w-full mt-2">
-                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Category</label>
+                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">வகை</label>
                 <div class="mt-1">
-                  <input id="category" name="category" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
+                  <input id="category" name="category" autocomplete="off" type="text" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                   <p class="customer_err text-xs text-red-600"></p>
                 </div>
             </div>
 
             <div class="w-full mt-2">
-                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Quantity</label>
+                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">எண்ணிக்கை</label>
                 <div class="mt-1">
                   <input id="category" name="quantity" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                   <p class="customer_err text-xs text-red-600"></p>
@@ -76,7 +76,7 @@
             </div>
 
             <div class="w-full mt-2">
-                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Price</label>
+                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">வாடகை விலை/நாள்</label>
                 <div class="mt-1">
                   <input id="category" name="price" autocomplete="off" type="number" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
                   <p class="customer_err text-xs text-red-600"></p>
@@ -86,7 +86,7 @@
             <div class="flex gap-2 mt-4">
                 <a href="/stocks">
                 <button class="px-2 py-2 bg-[#4ae450] flex items-center rounded-md text-slate-50 text-sm">
-                    Add stock
+                    சேர் 
                     <img src="{% static  'images/Plus.svg' %}" alt="plus">
                 </button>
                 </a>

@@ -14,7 +14,7 @@
     </div>
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div>
-            <p class="font-inter font-semibold text-xl">Attendance Management</p> 
+            <p class="font-inter font-semibold text-xl">வருகை கணக்கு</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p class="date"></p>
@@ -26,7 +26,7 @@
     <div class="flex gap-2">
         <a href="/attendancerecord">
             <button class="px-2 py-2 bg-[#4AE450] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-                View Records
+                பதிவுகள்
                 <img src="{% static  'images/Arrow right.svg' %}" alt="plus">
             </button>
         </a>
@@ -41,18 +41,18 @@
             <form class="max-w-[900px] h-full mt-4 p-4 bg-white rounded-md shadow-md form">
                 {%csrf_token%}
             <table class="mt-4 text-sm text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md overflow-x-auto w-full">
-                <p>Today: 22/02/2023</p>
+                <p class="date"></p>
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            Labor name
+                            பெயர்
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Contact number
+                            தொடர்பு எண்
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Present
+                            வருகை கணக்கு
                         </th>
                     </tr>
                 </thead>
@@ -101,9 +101,10 @@
     </section>  
 
     <script>
-        date = document.querySelector('.date')
+        date = document.querySelectorAll('.date')
         const dt = new Date().toDateString().split(' ')
-        date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
+        date[0].innerText = `${dt[2]},${dt[1]},${dt[3]}`
+        date[1].innerText = `இன்று: ${dt[2]},${dt[1]},${dt[3]}`
 
         
         const form  =  document.querySelector('.form')
