@@ -229,6 +229,7 @@ def reviewbill(request,pk=None):
         discount = request.POST.get('discount')
         grandtotal = request.POST.get('grandtotal')
 
+        print(items)
         items = json.loads(items)
         jsondata = {'items': items, 'subtotal': subtotal, 'discount': discount, 'grandtotal': grandtotal}
         jsondata = json.dumps(jsondata)

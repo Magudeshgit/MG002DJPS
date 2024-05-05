@@ -18,9 +18,7 @@
     <div class="relative"> 
     {% include 'core/navigation.html' %}
     </div>
-    <div class="flex justify-between relative w-full items-center sm:mt-12 mt-6">
-
-        <!-- Toast message -->
+    <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
         <div id="toast-success" class="absolute toast right-0 top-0 z-10 hidden items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert" onload="toastMessage()">
             <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -28,18 +26,17 @@
                 </svg>
                 <span class="sr-only">Check icon</span>
             </div>
-            <div class="ms-3 text-sm font-normal response-txt">Bill generated successfully/div>
+            <div class="ms-3 text-sm font-normal response-txt">Bill generated successfully</div>
             <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">
                 <span class="sr-only">Close</span>
                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
             </button>
-        </div>
-
+        </div>  
 
         <div>
-            <p class="font-inter font-semibold text-xl">Review Bill</p> 
+            <p class="font-inter font-semibold text-xl">ரசீது மாற்றம்</p> 
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p class="date"></p>
@@ -135,7 +132,7 @@
                 <img src="{% static  'images/Plus.svg' %}" alt="plus">
             </button>
 
-            <button data-status="true" onclick="printDocument()"  class="px-2 py-2 bg-[#F77F00] flex items-center rounded-md gap-2 text-slate-50 text-sm closebill">
+            <button onclick="printDocument()"  class="px-2 py-2 bg-[#F77F00] flex items-center rounded-md gap-2 text-slate-50 text-sm">
                 Print Bill
                 <img src="{% static  'images/Printer.svg' %}" alt="plus">
             </button>
@@ -182,10 +179,6 @@
 
     const toast = document.querySelector('.toast')
 
-    
-    date = document.querySelector('.date')
-    const dt = new Date().toDateString().split(' ')
-    date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
 
     // DOM Error presenters
     const customer_err = document.querySelector('.customer_err')
@@ -206,6 +199,7 @@
 
     // Pre-Intializing form
     customer.value = misc[3].innerText
+    console.log(editinfo.items)
 
     editinfo.items.forEach(e=>
     {
@@ -251,8 +245,9 @@
         const price = document.createElement('p')
         price.setAttribute('class', 'px-6 py-4')
         price.innerText = product.price
-
-        priceset.push([product.productname,product.price])
+        console.log(product.price)
+        priceset.push([product.productname, product.price])
+        console.log('sdsd',priceset)
         price_row.append(price)
 
         // Date Rented
@@ -289,11 +284,11 @@
         
         
         console.log(product.productname, e[1])
+        _updateprice()
         _quantitypricing(null, product.productname, e[1])
-
+        console.log('dfdf',null, product.productname, e[2], e[1])
         _DatewiseBilling(null, product.productname, e[2], e[1])
         console.log(priceset)
-        _updateprice()
     })
 
 
@@ -322,6 +317,7 @@
     // Autocomplete for Product Name Input
     product.addEventListener('input', ()=>{
         stockdata.forEach(element => {
+            console.log(element.productname.toLowerCase().includes(product.value.toLowerCase()))
             if (element.productname.toLowerCase().includes(product.value.toLowerCase()) && !trackset.has(element.productname)){
                         const option = document.createElement("option")
                         option.innerText = element.productname
@@ -366,7 +362,7 @@
         const quantity_row = document.createElement('td')
         const quantity_input = document.createElement('input')
         quantity_input.value = '1'
-        quantity_input.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
+        quantity_input.setAttribute('class', 'block text-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
         quantity_input.setAttribute('placeholder', 'Quantity')
         quantity_input.setAttribute('type', 'number')
         quantity_input.addEventListener('input', _quantitypricing)
@@ -472,18 +468,20 @@
 
         table.childNodes.forEach(e=>{
             payload.push([e.childNodes[1].innerText, e.childNodes[2].childNodes[0].value, e.childNodes[5].childNodes[0].value])
-        
         })
 
         // Appending data manually to post payload
+        console.log(e.target.dataset.status === 'true')
         if (e.target.dataset.status === 'true')
         {
             Form.append("items", JSON.stringify(payload))
+            console.log(JSON.stringify(payload))
             Form.append("customer", customer.value)
             Form.append("billstatus", e.target.dataset.status)
             Form.append("discount", discountvalue)
             Form.append("subtotal", subtotalvalue)
             Form.append("grandtotal", grandtotalvalue)
+
             let response = fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
                 method: 'POST',
                 body: Form
@@ -522,7 +520,7 @@
                 {
                     toast.style.display = 'flex'
                     console.log("voila")
-                    //location.reload()
+                    location.reload()
                 }
                 else
                 {
@@ -561,7 +559,7 @@
         else
         {
             priceset.forEach(i=>{
-            if (i[0] === e.parentNode.parentNode.childNodes[1].innerText)
+            if (i[0] === e.target.parentNode.parentNode.childNodes[1].innerText)
             {
                 const prod = _getproductinfo(i[0])
                 i[1] = (prod.price*e.target.value)
@@ -579,6 +577,7 @@
             const prod = _getproductinfo(productname)
             const price = prod.price * quantity
             const diffdays = getDate_Difference(proddate)
+            console.log('dfgdfg',diffdays*price)
 
             priceset.forEach(e=>{
             if (e[0] === productname)
@@ -637,8 +636,12 @@
         const _olddate = new Date(olddate)
         console.log(olddate, currdate)
         const timediff = Math.abs(currdate - _olddate)
-        console.log('asas',timediff)
-        return Math.floor( timediff / (1000 * 60 * 60 * 24))
+        const resultant = Math.floor( timediff / (1000 * 60 * 60 * 24))
+        if (resultant == 0)
+        {
+            return 1
+        }
+        return resultant
     }
 
     function printDocument()
