@@ -195,7 +195,7 @@ def newbill(request):
         subtotal = request.POST.get('subtotal')
         discount = request.POST.get('discount')
         grandtotal = request.POST.get('grandtotal')
-
+        print(items)
         items = json.loads(items)
         jsondata = {'items': items, 'subtotal': subtotal, 'discount': discount, 'grandtotal': grandtotal}
         jsondata = json.dumps(jsondata)
@@ -297,3 +297,6 @@ def attendancerecords(request):
     attendances = attendance.objects.all()
     labors = labor.objects.all()
     return render(request, "core/attendancerecord.html", {'attendance': attendances, 'labors':labors})
+
+def prindoc(request):
+    return render(request, 'core/printdocument.html')

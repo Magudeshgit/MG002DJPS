@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://printjs-4de6.kxcdn.com/print.min.css" rel="stylesheet">
     {% tailwind_css %}
 </head>
 <body class="font-inter bg-[#F5F5F7] max-w-full h-[100%]">
@@ -57,8 +58,8 @@
         </button> -->
     </div>
     </div>
-    <form class="w-full h-full p-4 bg-white rounded-md shadow-md form" method="POST" autocomplete="off">
-        <input type="text" name="hidden" class="hidden" autocomplete="false">
+    <form id="form" class="w-full h-full p-4 bg-white rounded-md shadow-md form" method="POST" autocomplete="off">
+        <input type="hidden" name="hidden" class="hidden" autocomplete="false">
         {% csrf_token %}
         <!-- Customer name and email -->
         <div class="flex items-center justify-evenly gap-4 w-full lg:flex-nowrap flex-wrap">
@@ -74,7 +75,7 @@
             </div>
 
         </div>
-        <div class="w-full mt-4">
+        <div class="w-full mt-4" id="items">
             <label for="items" class="block text-sm font-medium leading-6 text-gray-900">Items</label>
             <div class="mt-1">
               <input id="items" list="products" name="items" type="text" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products">
@@ -85,7 +86,7 @@
 
         <!-- Billed items -->
         <div class="relative max-w-[100%] min-h-full overflow-x-scroll mt-4 rounded-md bg-red-500">
-            <table class="text-sm text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md shadow-md overflow-x-auto w-full">
+            <table id="tabler" class="text-sm text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md shadow-md overflow-x-auto w-full">
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
@@ -117,7 +118,7 @@
         </div>
 
         <!-- Discount -->
-        <div class="w-full mt-6">
+        <div class="w-full mt-6" id="discount">
             <label for="discount" class="block text-sm font-medium leading-6 text-gray-900">Discount (in %)</label>
             <div class="mt-1">
               <input id="discount" name="customer" type="number"  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -128,10 +129,15 @@
             <p class="text-sm discount">Discount: ₹0</p>
             <p class="text-lg font-semibold grandtotal">Grand Total: ₹0</p>
         </div>
-        <div class="flex gap-2 mt-4">
+        <div class="flex gap-2 mt-4" id="ctagrp">
             <button data-status="false" class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm genbill">
                 Modify Bill
                 <img src="{% static  'images/Plus.svg' %}" alt="plus">
+            </button>
+
+            <button data-status="true" onclick="printDocument()"  class="px-2 py-2 bg-[#F77F00] flex items-center rounded-md gap-2 text-slate-50 text-sm closebill">
+                Print Bill
+                <img src="{% static  'images/Printer.svg' %}" alt="plus">
             </button>
 
             <button data-status="true" class="px-2 py-2 bg-[#4FC354] flex items-center rounded-md gap-2 text-slate-50 text-sm closebill">
@@ -146,6 +152,7 @@
     <p class="misc hidden">{{customer}}</p>
     </main>
 </section>
+<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
 <script>
     //Raw Data
     const misc = document.querySelectorAll('.misc')
@@ -203,8 +210,6 @@
     editinfo.items.forEach(e=>
     {
         const product = _getproductinfo(e[0])
-
-        trackset.add(e[0])
         
         const th = document.createElement('th')
         th.innerText = e[0]
@@ -228,8 +233,8 @@
         const quantity_row = document.createElement('td')
         const quantity_input = document.createElement('input')
         quantity_input.value = e[1]
-        quantity_input.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
-        quantity_input.setAttribute('placeholder', 'Quantity')
+        quantity_input.setAttribute('class', 'flex text-center rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
+        quantity_input.setAttribute('disabled', 'true')
         quantity_input.addEventListener('input', _quantitypricing)
         quantity_row.append(quantity_input)
 
@@ -254,7 +259,6 @@
         const date_row = document.createElement('td')
         const date = document.createElement('input')
         date.value = e[2]
-        console.log("asd", e[2])
         date.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
         date.setAttribute('type', 'date')
         date.setAttribute('value', toDateInputValue(new Date()))
@@ -266,10 +270,8 @@
         const rdate_row = document.createElement('td')
         const rdate = document.createElement('p')
         rdate.innerText = getDate_Difference(e[2])
-        rdate.setAttribute('type', 'date')
-        rdate.setAttribute('value', toDateInputValue(new Date()))
         rdate.setAttribute('disabled', true)
-        rdate.setAttribute('class', 'border-none')
+        rdate.setAttribute('class', 'px-6 py-4')
 
         rdate_row.append(rdate)
 
@@ -288,6 +290,8 @@
         
         console.log(product.productname, e[1])
         _quantitypricing(null, product.productname, e[1])
+
+        _DatewiseBilling(null, product.productname, e[2], e[1])
         console.log(priceset)
         _updateprice()
     })
@@ -330,7 +334,8 @@
         });
         })
 
-    // Handling Data table for billed items
+    // Handling Data table for billed items. Handles new product addition!
+
     function changeInput_prod(e) {
         product.value = e.target.value
         e.target.parentNode.innerHTML = ''
@@ -383,15 +388,27 @@
         price.innerText = productobj.price
 
         priceset.push([productobj.productname,productobj.price])
-        console.log(priceset)
 
         price_row.append(price)
+
+        //Rental Date Column
+        
+        const date_row = document.createElement('td')
+        const date = document.createElement('input')
+        date.value = toDateInputValue(new Date())
+        date.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
+        date.setAttribute('type', 'date')
+        date.setAttribute('value', toDateInputValue(new Date()))
+        date.addEventListener('input', _DatewiseBilling)
+    
+        date_row.append(date)
 
         tr.append(removebtn_row)   
         tr.append(th)   
         tr.append(quantity_row)  
         tr.append(instock_row)
         tr.append(price)
+        tr.append(date_row)
         
         table.append(tr)
         
@@ -412,6 +429,7 @@
             {
                 priceset.pop(i)
                 trackset.delete(p_name)
+                console.log("removing", priceset)
             }
         })
         e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode)
@@ -453,7 +471,7 @@
         const itemdata = new Array()
 
         table.childNodes.forEach(e=>{
-            payload.push([e.childNodes[1].innerText,e.childNodes[2].childNodes[0].value])
+            payload.push([e.childNodes[1].innerText, e.childNodes[2].childNodes[0].value, e.childNodes[5].childNodes[0].value])
         
         })
 
@@ -504,7 +522,7 @@
                 {
                     toast.style.display = 'flex'
                     console.log("voila")
-                    location.reload()
+                    //location.reload()
                 }
                 else
                 {
@@ -530,13 +548,10 @@
 
     // Handles event listeners on quantity, removes pricing when arguments are present
     function _quantitypricing(e, productname=null, quantity=null) {
-        console.log('called')
         if (productname!=null)
         {
-            console.log("hola")
             const prod = _getproductinfo(productname)
             priceset.forEach(i=>{
-                // console.log('asdas',productname, i[0])
             if (i[0] === productname)
             {
                 i[1] = (prod.price*quantity)
@@ -545,16 +560,46 @@
         }
         else
         {
-            console.log('lslsl')
             priceset.forEach(i=>{
-            if (i[0] === e.target.parentNode.parentNode.childNodes[1].innerText)
+            if (i[0] === e.parentNode.parentNode.childNodes[1].innerText)
             {
-                console.log("inif", e.target.value)
                 const prod = _getproductinfo(i[0])
                 i[1] = (prod.price*e.target.value)
-
             }
         })
+        }
+        _updateprice()
+    }
+    //priceset.push([product.productname,product.price]) will have product name and its sub total at that point
+    function _DatewiseBilling(x, productname=null, proddate=null, quantity=null)
+    {
+        if (productname!=null)
+        {
+            console.log("ops")
+            const prod = _getproductinfo(productname)
+            const price = prod.price * quantity
+            const diffdays = getDate_Difference(proddate)
+
+            priceset.forEach(e=>{
+            if (e[0] === productname)
+            {
+                e[1] = diffdays * price
+            }
+        })
+        }
+        else
+        {
+            const diffdays = getDate_Difference(x.target.value)
+            const prod = _getproductinfo(x.target.parentNode.parentNode.childNodes[1].innerText)
+            const price = prod.price * x.target.parentNode.parentNode.childNodes[2].childNodes[0].value
+
+            priceset.forEach(e=>{
+                if (e[0] === x.target.parentNode.parentNode.childNodes[1].innerText)
+                {
+                    e[1] = diffdays * price
+                    console.log(priceset)
+                }
+            })
         }
         _updateprice()
     }
@@ -594,6 +639,19 @@
         const timediff = Math.abs(currdate - _olddate)
         console.log('asas',timediff)
         return Math.floor( timediff / (1000 * 60 * 60 * 24))
+    }
+
+    function printDocument()
+    {
+        printJS({
+            printable: 'form',
+            type: 'html',
+            // targetstyles: '*',
+            header: '<div style="display: flex; align-items: center; justify-content: space-between"><div><p><b style="font-size: 24px">ஸ்ரீ வெங்கடேஸ்வரா ஸ்டோர்ஸ்</b><br>பாத்திர வாடகைக்கடை, PVC பந்தல்<br>3/269A, தாராபுரம் ரோடு,<br>கொங்கல் நகரம் - 642 205</p><br></div><div><p>Bill No:112<br>Date: 09-04-2024</p></div></div>',
+            headerStyle: 'font-size: 24px',
+            ignoreElements: ['items','discount','ctagrp','removebtn'],
+            style: '.grandtotal{font-size: 24px; font-weight: bold}'
+        })
     }
 </script>
 </body>
