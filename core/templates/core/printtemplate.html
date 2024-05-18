@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Tiro+Tamil:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles/print.css' %}">
+</head>
+<body>
+    <!-- !Update for Measurement prompt for PVC Pandhal and carpet after stock entry -->
+    <main> 
+        <div class="header">
+            <div class="companydetails">
+                <p class="tab cpname">
+                    <b>ஸ்ரீ வெங்கடேஸ்வரா ஸ்டோர்ஸ்</b>
+                </p>
+                <p class="ta ctdt">
+                    பாத்திர வாடகைக்கடை, PVC பந்தல்
+                    <br>
+                    3/269A, தாராபுரம் ரோடு,<br> கொங்கல் நகரம் - 642 205.
+
+                </p>
+            </div>
+            <div class="billdetails">
+                <p class="date">Date: 18/05/2024</p>
+                <p>Bill No: {{bill.id}}</p>
+            </div>
+        </div>
+        <div class="cstdt">
+            <p class="tab chead">வாடிக்கையாளர்:</p>
+            <p style="margin-top: 7px;">{{bill.client}}</p>
+            <p>{{bill.client.address}}</p>
+            <p>{{bill.client.contactnumber}}</p>
+        </div>
+        <br>
+        <br>
+        <hr>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Rented days</th>
+                    <th>Rate/Day</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+            </tbody>
+        </table>
+        <div class="total">
+            <p class="subtotal">Subtotal: ₹500</p>
+            <p class="dsc">Discount 20%: ₹100</p>
+            <p class="gdt">Grand Total: ₹400</p>
+        </div>
+        <div class="footer">
+            <p>
+            ஸ்ரீ வெங்கடேஸ்வரா ஸ்டோர்ஸ் || பாத்திர வாடகைக்கடை, PVC பந்தல் || 3/269A, தாராபுரம் ரோடு,
+            கொங்கல் நகரம் - 642 205.
+            </p>    
+        </div>
+    </main>
+    <p class="bill hidden">{{bill.products}}</p>
+    <p class="stocks hidden">{{stock}}</p>
+    <script>
+        const rawdata = document.querySelector(".bill").innerText
+        const stockrawdata = document.querySelector(".stocks").innerText
+
+        const subtotal = document.querySelector('.subtotal')
+        const dsc = document.querySelector('.dsc')
+        const gdt = document.querySelector('.gdt')
+        
+        const tbody = document.querySelector(".tbody")
+
+        const data = JSON.parse(rawdata)
+        const stockdata = JSON.parse(stockrawdata)
+        console.log(stockdata)
+
+        date = document.querySelector('.date')
+        const dt = new Date().toDateString().split(' ')
+        date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
+
+        data.items.forEach(item => {
+            let stock;
+            stockdata.forEach(s=>{
+                if (s['productname'] === item[0])
+                {
+                    stock = s;
+                }
+            })
+            console.log(stock)
+            let tr = document.createElement('tr')
+            
+            // Item Name
+            let td1 = document.createElement('td')
+            let p1 = document.createElement('p')
+            p1.innerText = item[0]
+            td1.append(p1)
+            tr.append(td1)
+
+            // Quantity
+            let td2 = document.createElement('td')
+            let p2 = document.createElement('p')
+            p2.innerText = item[1]
+            td2.append(p2)
+            tr.append(td2)
+
+            // Rented Days
+            let td3 = document.createElement('td')
+            let p3 = document.createElement('p')
+            p3.innerText = getDate_Difference(item[2])
+            td3.append(p3)
+            tr.append(td3)
+
+
+            // Rate
+            let td4 = document.createElement('td')
+            let p4 = document.createElement('p')
+    
+            p4.innerText = stock.price
+            td4.append(p4)
+            tr.append(td4)
+
+
+            // Price
+            let td5 = document.createElement('td')
+            let p5 = document.createElement('p')
+            p5.innerText = stock.price * getDate_Difference(item[2])
+            td5.append(p5)
+            tr.append(td5)
+
+            tbody.append(tr)
+        });
+
+        // Vehicle Rent
+        let tr = document.createElement('tr')
+        let td1 = document.createElement('td')
+        let td2 = document.createElement('td')
+        let td3 = document.createElement('td')
+        let td4 = document.createElement('td')
+        let td5 = document.createElement('td')
+        let p1 = document.createElement('p')
+        let p4 = document.createElement('p')
+        p1.innerHTML = "<b>வண்டி வாடகை</b>"
+        p4.innerText = "0"
+        td1.append(p1)
+        td5.append(p4)
+
+        tr.append(td1,td2,td3,td4,td5)
+
+        tbody.append(tr)
+
+        subtotal.innerText = "கூட்டுத்தொகை: ₹" + data.subtotal
+        dsc.innerText = 'தள்ளுபடி (%): ' + data.discount
+        gdt.innerText = 'மொத்தம்: ₹' + data.grandtotal
+
+        // Dependancy Function
+        function toDateInputValue(dateObject){
+        const local = new Date(dateObject);
+        local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
+        return local.toJSON().slice(0,10);
+        };
+
+        function getDate_Difference(olddate)
+        {
+            const currdate = new Date(toDateInputValue(new Date()))
+            const _olddate = new Date(olddate)
+            console.log(olddate, currdate)
+            const timediff = Math.abs(currdate - _olddate)
+            const resultant = Math.floor( timediff / (1000 * 60 * 60 * 24))
+            if (resultant == 0)
+            {
+                return 1
+            }
+            return resultant
+        }
+        window.onload = ()=>{
+            print(document)
+        }
+    </script>
+</body>
+</html>

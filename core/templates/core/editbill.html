@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InvenTrove | New Bill</title>
+    <title>InvenTrove | Edit Bill</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,21 +38,22 @@
         <div>
             <p class="font-inter font-semibold text-xl">ரசீது மாற்றம்</p> 
         </div>
-        <div class="items-center gap-4 hidden sm:flex">
-            <p class="date"></p>
-            <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
-                <p class="text-slate-300">M</p>
-            </div>
-        </div>
     </div>
     <main class="mt-4 min-w-full h-full">
     <!-- Table -->
-    <div class="flex justify-between mt-2 items-center gap-2 flex-wrap">
+    <div class="flex justify-between mb-2 items-center gap-2 flex-wrap">
     <div class="flex gap-2">
-        <!-- <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-            Add More
+        <a href="/newbill" class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
+            புதிய ரசீது
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
-        </button> -->
+        </a>
+        <div class="items-center gap-4">
+            <p class="date"></p>
+            <a href="{% url 'print' bill.id%}" class="px-2 py-2 cursor-pointer bg-[#F77F00] flex items-center rounded-md gap-2 text-slate-50 text-sm">
+                Print Bill
+                <img src="{% static  'images/Printer.svg' %}" alt="plus">
+            </a>
+        </div>
     </div>
     </div>
     <form id="form" class="w-full h-full p-4 bg-white rounded-md shadow-md form" method="POST" autocomplete="off">
@@ -115,10 +116,18 @@
         </div>
 
         <!-- Discount -->
-        <div class="w-full mt-6" id="discount">
+        <div class="w-full mt-6">
             <label for="discount" class="block text-sm font-medium leading-6 text-gray-900">தள்ளுபடி (in %)</label>
             <div class="mt-1">
-              <input id="discount" name="customer" type="number"  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <input id="discount" name="discount" type="number"  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            </div>
+        </div>
+
+         <!-- Vehicle Rent -->
+         <div class="w-full mt-6">
+            <label for="vehicle class="block text-sm font-medium leading-6 text-gray-900">வண்டி வாடகை</label>
+            <div class="mt-1 flex">
+              <input id="vehicle" name="vehiclerent" type="number"  class="vehiclerent block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
             </div>
         </div>
         <div class="mt-4 gap-3 flex flex-col">
@@ -126,19 +135,19 @@
             <p class="text-sm discount">Discount: ₹0</p>
             <p class="text-lg font-semibold grandtotal">Grand Total: ₹0</p>
         </div>
-        <div class="flex gap-2 mt-4" id="ctagrp">
+        <div class="flex gap-2 mt-4 flex-wrap" id="ctagrp">
             <button data-status="false" class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm genbill">
-                Modify Bill
+                மாற்றியமைக்க
                 <img src="{% static  'images/Plus.svg' %}" alt="plus">
             </button>
-
-            <button onclick="printDocument()"  class="px-2 py-2 bg-[#F77F00] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-                Print Bill
-                <img src="{% static  'images/Printer.svg' %}" alt="plus">
+            {% if bill.billstatus != 'arbitrary' %}
+            <button data-status="arbitrary" class="px-2 py-2 bg-[#e7ba26] flex items-center rounded-md gap-2 text-slate-50 text-sm stockclose">
+                பொருள் வருகை
+                <img src="{% static  'images/istock.svg' %}" alt="plus">
             </button>
-
+            {% endif %}
             <button data-status="true" class="px-2 py-2 bg-[#4FC354] flex items-center rounded-md gap-2 text-slate-50 text-sm closebill">
-                Close Bill
+                கணக்கு முடிந்தது
                 <img src="{% static  'images/done.svg' %}" alt="plus">
             </button>
         </div>
@@ -166,6 +175,8 @@
     const table  = document.querySelector('.tablewrapper')
     table.innerHTML = ''
 
+    const vehiclerent = document.querySelector('.vehiclerent')
+
     const subtotal = document.querySelector('.subtotal')
     const discount_input = document.querySelector('#discount')
     const discount = document.querySelector('.discount')
@@ -173,8 +184,10 @@
 
     const form = document.querySelector('.form')
     const genbill = document.querySelector('.genbill')
+    const stockclose = document.querySelector('.stockclose')
     const closebill = document.querySelector('.closebill')
     genbill.addEventListener('click', formhandler)
+    stockclose.addEventListener('click', formhandler)
     closebill.addEventListener('click', formhandler)
 
     const toast = document.querySelector('.toast')
@@ -290,6 +303,11 @@
         _DatewiseBilling(null, product.productname, e[2], e[1])
         console.log(priceset)
     })
+
+    discount_input.value = editinfo.discount
+    vehiclerent.value = editinfo.vehiclerent
+    vehicle_rent(vh=parseInt(editinfo.vehiclerent))
+    _updateprice(discountpercent=parseInt(editinfo.discount))
 
 
 
@@ -434,10 +452,10 @@
 
     //Pricing handler
 
-    // TODO!!! - Complete pricing updation w.r.t quantiy
 
         // Subtotal handlers
     function _updateprice(discountpercent=0) {
+        console.log(priceset)
         subtotalvalue=0        
         priceset.forEach(e=>{
             subtotalvalue += e[1]
@@ -452,7 +470,34 @@
         grandtotal.innerText = "மொத்தம்: ₹" + grandtotalvalue
     }
 
-        // Discount handlers
+        //Vehicle Rent Handlers
+
+        function vehicle_rent(vh)
+        {
+            console.log('XXX', ['vehiclerent',vh])
+            priceset.push(['vehiclerent',vh])
+            _updateprice()
+        }
+
+    vehiclerent.addEventListener('input', (f)=>{
+        flag = false
+        let intval = parseInt(f.target.value)
+        priceset.forEach(e=>{
+            if (e[0] == "vehiclerent")
+            {   
+                e[1] = (isNaN(intval)?0:intval)
+                flag = true
+            }
+        })
+        if (flag == false)
+        {
+            priceset.push(["vehiclerent", (isNaN(intval)?0:intval)])
+        }
+        vehiclerentvalue = intval
+        _updateprice(editinfo.discount)
+    })
+
+    // Discount handlers
     discount_input.addEventListener('input', ()=>{
         _updateprice(discount_input.value)
     })
@@ -471,13 +516,13 @@
         })
 
         // Appending data manually to post payload
-        console.log(e.target.dataset.status === 'true')
         if (e.target.dataset.status === 'true')
         {
             Form.append("items", JSON.stringify(payload))
             console.log(JSON.stringify(payload))
             Form.append("customer", customer.value)
-            Form.append("billstatus", e.target.dataset.status)
+            Form.append("billstatus", 'closed')
+            Form.append("vehiclerent", vehiclerent.value)
             Form.append("discount", discountvalue)
             Form.append("subtotal", subtotalvalue)
             Form.append("grandtotal", grandtotalvalue)
@@ -488,6 +533,7 @@
             })
 
             response.then(e=>{
+                console.log("which resp 1")
                 if (e.status == 200)
                 {
                     toast.style.display = 'flex'
@@ -502,12 +548,15 @@
                 }
             })
         }
-        else  
+        else
         {
+            console.log('which resp 2')
             if (_formvalidator() === false) return;
             Form.append("items", JSON.stringify(payload))
             Form.append("customer", customer.value)
-            Form.append("billstatus", e.target.dataset.status)
+            if (e.target.dataset.status === 'arbitrary') Form.append("billstatus", 'arbitrary');
+            else Form.append("billstatus", 'opened');
+            Form.append("vehiclerent", vehiclerent.value)
             Form.append("discount", discountvalue)
             Form.append("subtotal", subtotalvalue)
             Form.append("grandtotal", grandtotalvalue)
@@ -649,8 +698,7 @@
         printJS({
             printable: 'form',
             type: 'html',
-            // targetstyles: '*',
-            header: '<div style="display: flex; align-items: center; justify-content: space-between"><div><p><b style="font-size: 24px">ஸ்ரீ வெங்கடேஸ்வரா ஸ்டோர்ஸ்</b><br>பாத்திர வாடகைக்கடை, PVC பந்தல்<br>3/269A, தாராபுரம் ரோடு,<br>கொங்கல் நகரம் - 642 205</p><br></div><div><p>Bill No:112<br>Date: 09-04-2024</p></div></div>',
+            header: '<div style="display: flex; align-items: center; justify-content: space-between"><div><p><b style="font-size: 24px">ஸ்ரீ வெங்கடேஸ்வரா ஸ்டோர்ஸ்</b><br>பாத்திர வாடகைக்கடை, PVC பந்தல்<br>3/269A, தாராபுரம் ரோடு,<br>கொங்கல் நகரம் - 642 205</p><br></div><div><p>Bill No:112<br>Date: 11-05-2024</p></div></div>',
             headerStyle: 'font-size: 24px',
             ignoreElements: ['items','discount','ctagrp','removebtn'],
             style: '.grandtotal{font-size: 24px; font-weight: bold}'

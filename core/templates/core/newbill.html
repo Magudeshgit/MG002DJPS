@@ -46,12 +46,12 @@
     </div>
     <main class="mt-4 min-w-full h-full">
     <!-- Table -->
-    <div class="flex justify-between mt-2 items-center gap-2 flex-wrap">
+    <div class="flex justify-between mt-2 mb-2 items-center gap-2 flex-wrap">
     <div class="flex gap-2">
-        <!-- <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
-            Add More
+        <a href="/bills" class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
+            கணக்குகள்
             <img src="{% static  'images/Plus.svg' %}" alt="plus">
-        </button> -->
+        </a>
     </div>
     </div>
     <form class="w-full h-full p-4 bg-white rounded-md shadow-md form" method="POST" autocomplete="off">
@@ -81,14 +81,14 @@
         <div class="w-full mt-4">
             <label for="items" class="block text-sm font-medium leading-6 text-gray-900">பொருட்கள் சேர்</label>
             <div class="mt-1">
-              <input id="items" list="products" name="items" type="text" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products">
+              <input id="items" list="products" autocomplete="off" name="items" type="text" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products">
               <datalist id="products" class="bg-gray-50  text-gray-900 text-sm rounded-lg flex flex-col"></datalist>
                 <p class="text-xs text-red-600 quantity_err"></p>
             </div>
         </div>
 
         <!-- Billed items -->
-        <div class="relative max-w-[100%] min-h-full overflow-x-scroll mt-4 rounded-md bg-red-500">
+        <div class="relative max-w-[100%] min-h-full overflow-x-scroll mt-4 rounded-md">
             <table class="text-sm text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md shadow-md overflow-x-auto w-full">
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
@@ -117,11 +117,19 @@
             </table>
         </div>
 
+        <!-- Vehicle Rent -->
+        <div class="w-full mt-6">
+            <label for="vehicle class="block text-sm font-medium leading-6 text-gray-900">வண்டி வாடகை</label>
+            <div class="mt-1 flex">
+              <input id="vehicle" value="0" name="vehiclerent" type="number"  class="vehiclerent block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            </div>
+        </div>
+
         <!-- Discount -->
         <div class="w-full mt-6">
             <label for="discount" class="block text-sm font-medium leading-6 text-gray-900">தள்ளுபடி (in %)</label>
             <div class="mt-1">
-              <input id="discount" name="customer" type="number"  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <input id="discount" value="0" name="customer" type="number"  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
             </div>
         </div>
         <div class="mt-4 gap-3 flex flex-col">
@@ -135,7 +143,7 @@
                 <img src="{% static  'images/Plus.svg' %}" alt="plus">
             </button>
 
-            <button data-status="true" class="px-2 py-2 bg-[#4FC354] flex items-center rounded-md gap-2 text-slate-50 text-sm closebill">
+            <button data-status="true" class="px-2 py-2 bg-[#4FC354] flex items-center rounded-md gap-2 text-slate-50 text-sm closebill hidden">
                 பிரிண்ட்
                 <img src="{% static  'images/Printer.svg' %}" alt="plus">
             </button>
@@ -160,6 +168,8 @@
     const prod_datalist  = document.querySelector('#products')
     const table  = document.querySelector('.tablewrapper')
     table.innerHTML = ''
+
+    const vehiclerent = document.querySelector('.vehiclerent')
 
     const subtotal = document.querySelector('.subtotal')
     const discount_input = document.querySelector('#discount')
@@ -188,7 +198,7 @@
     const priceset = new Array()
 
     // Global declarations
-    let subtotalvalue, grandtotalvalue, discountvalue;
+    let vehiclerentvalue, subtotalvalue, grandtotalvalue, discountvalue;
     const payload =  []
 
 
@@ -216,25 +226,33 @@
     }
 
     // Autocomplete for Product Name Input
+    console.log(stockdata)
     product.addEventListener('input', ()=>{
+        let option;
         stockdata.forEach(element => {
-            if (element.productname.toLowerCase().includes(product.value.toLowerCase()) && !trackset.has(element.productname)){
-                        const option = document.createElement("option")
-                        option.innerText = element.productname
+            //CORRECTION REMOVAL(17/5/2024: 6:25pm) - element.productname.toLowerCase().includes(product.value.toLowerCase()) && !trackset.has(element.productname)
+            console.log('DEBUG', element.id.toString().includes(product.value))
+            if (element.id.toString().includes(product.value) && !trackset.has(element.productname)){
+                        option = document.createElement("option")
+                        option.innerHTML = `<p>#${element.id}&nbsp&nbsp</p><p>${element.productname}</p>`
                         option.setAttribute('value', element.productname)
-                        option.setAttribute('class', 'px-4 py-2 border-b')
+                        option.setAttribute('class', 'px-4 py-2 border-b flex items-center justify-between')
                         option.addEventListener('click', changeInput_prod)
                         prod_datalist.append(option)
-                        trackset.add(element.productname)
+                        
             }
         });
+        if (product.value === '')
+        {
+            prod_datalist.innerHTML = ''
+        }
         })
 
     // Handling Data table for billed items
     function changeInput_prod(e) {
         product.value = e.target.value
         e.target.parentNode.innerHTML = ''
-
+        trackset.add(e.target.value)
         const productobj = _getproductinfo(e.target.value)
 
 
@@ -267,7 +285,16 @@
         quantity_input.setAttribute('min', '1')
         quantity_input.setAttribute('m', productobj.quantity)
         quantity_input.addEventListener('input', _quantitypricing)
+        
+        quantity_row.setAttribute('class', 'flex items-center gap-2')
         quantity_row.append(quantity_input)
+
+        
+        if (productobj.productname === 'PVC பந்தல்' || productobj.productname === 'Carpet') //Change after stock entry!
+        {
+            let measure_txt = document.createElement('p').innerText = 'Sqft'
+            quantity_row.append(measure_txt)
+        }
 
 
         // Available stock column
@@ -347,12 +374,35 @@
 
         discount.innerText = "தள்ளுபடி "+ discountpercent +"%: ₹" + discountvalue
 
+        // Calc_Grandtotal(grandtotalvalue)
+
         grandtotal.innerText = "மொத்தம்: ₹" + grandtotalvalue
     }
 
         // Discount handlers
     discount_input.addEventListener('input', ()=>{
         _updateprice(discount_input.value)
+    })
+
+        // Vehicle Rent Handlers
+    vehiclerent.addEventListener('input', (f)=>{
+        flag = false
+        let intval = parseInt(f.target.value)
+        console.log(intval, isNaN(intval))
+        priceset.forEach(e=>{
+            if (e[0] == "vehiclerent")
+            {   
+                e[1] = (isNaN(intval)?0:intval)
+                flag = true
+            }
+        })
+        if (flag == false)
+        {
+            priceset.push(["vehiclerent", (isNaN(intval)?0:intval)])
+        }
+        vehiclerentvalue = intval
+        console.log('XXX', discount_input.value)
+        _updateprice(discount_input.value)        
     })
     
     // Form Submission Handlers
@@ -375,8 +425,9 @@
             console.log(_formvalidator())
             Form.append("items", JSON.stringify(payload))
             Form.append("customer", customer.value)
-            Form.append("billstatus", e.target.dataset.status)
-            Form.append("discount", discountvalue)
+            Form.append("billstatus", 'opened') //e.target.dataset.status
+            Form.append("vehiclerent", vehiclerent.value)
+            Form.append("discount", discount_input.value)
             Form.append("subtotal", subtotalvalue)
             Form.append("grandtotal", grandtotalvalue)
 
@@ -468,6 +519,11 @@
     local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
     return local.toJSON().slice(0,10);
     };
+
+    // function Calc_Grandtotal(gtd)
+    // {
+    //     grandtotal.innerText = gtd + vehiclerent.value
+    // }
 </script>
 </body>
 </html>

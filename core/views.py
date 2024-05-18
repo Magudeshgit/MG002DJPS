@@ -5,16 +5,23 @@ from .models import stock, client, bill, labor, attendance
 from .models import salarymanagement as salaryobj
 from django.utils import timezone
 from django.db.models import Sum, Q
+from json import JSONDecodeError
+#from easy_pdf.rendering import render_to_pdf_response
 import json
 
+months = [
+"January", "February", "March", "April", "May", "June",
+"July", "August", "September", "October", "November", "December"
+]
 
 def home(request):
     return HttpResponse("Home page")
 @login_required(login_url='/auth/signup/')
 def dashboard(request):
     model = stock.objects.all()
+    # MonthlyReport.objects.get_or_create(month=months[timezone.localdate().month])
     ovdc = model.order_by('productname')
-    model_bills = bill.objects.filter(billstatus=False)
+    model_bills = bill.objects.filter(billstatus='opened')
     ic_stock  = 0
     for i in model:
         if i.quantity < i.maximumstock:
@@ -68,7 +75,7 @@ def editstock(request,pk):
 
         prod.productname = _productname
         prod.category=_category
-        prod.maximumstock+=int(_quantity)
+        prod.maximumstock=int(_quantity)
         prod.quantity=int(_quantity)
         prod.price=_price
         prod.save()
@@ -170,6 +177,32 @@ def salarymanagement(request):
         }
     return render(request, 'core/salarymanagement.html', context)
 
+def editsalary(request, pk):
+    ss = salaryobj.objects.get(id=pk)
+    print(request.method)
+    if request.method == 'POST':
+        print("POST REQUEST", request.POST)
+        transtype = request.POST.get('type')
+        reason = request.POST.get('reason')
+        amount = request.POST.get('amount')
+        date = request.POST.get('date')
+        
+        _transaction = [transtype,reason,amount,date]
+        if transtype == 'Addition':
+            ss.salarydue += int(amount)
+        else:
+            ss.salarydue -= int(amount)
+
+        if ss.transaction is None:
+            ss.transaction = json.dumps({"transaction": [_transaction]})
+            ss.save()
+        else:
+            a = json.loads(ss.transaction)
+            b = a['transaction'].append(_transaction)
+            ss.transaction = json.dumps(a)
+            ss.save()
+    return render(request, 'core/editsalary.html', {'editinfo': ss, 'transacts': ss.transaction})
+
 def bills(request):
     bill_ = bill.objects.all()
     _bill = reversed(bill_)
@@ -192,23 +225,23 @@ def newbill(request):
         customer = request.POST.get('customer')
         items = request.POST.get('items')
         billstatus = request.POST.get('billstatus')
+        vehiclerent = request.POST.get('vehiclerent')
         subtotal = request.POST.get('subtotal')
         discount = request.POST.get('discount')
         grandtotal = request.POST.get('grandtotal')
-        print(items)
         items = json.loads(items)
-        jsondata = {'items': items, 'subtotal': subtotal, 'discount': discount, 'grandtotal': grandtotal}
+        jsondata = {'items': items, 'vehiclerent': vehiclerent,'subtotal': subtotal, 'discount': discount, 'grandtotal': grandtotal}
         jsondata = json.dumps(jsondata)
 
         print('data',items)
-        if billstatus == 'false':
+        if billstatus == 'opened':
             for i in items:
                 _product = stock.objects.get(productname=i[0])
                 _product.quantity = _product.quantity - int(i[1])
                 _product.save()
 
         _customer, status = client.objects.get_or_create(clientname=customer)
-        new_bill = bill.objects.create(client=_customer,products=jsondata, grandtotal=int(grandtotal))   
+        new_bill = bill.objects.create(client=_customer,products=jsondata,billstatus=billstatus,grandtotal=int(grandtotal))   
         new_bill.save()
     
     clients = client.objects.values_list('clientname')
@@ -220,18 +253,24 @@ def newbill(request):
     return render(request, "core/newbill.html", context)
 
 def reviewbill(request,pk=None):
+    print(request.POST)
     if request.method == 'POST':
-        print(request.POST)
         customer = request.POST.get('customer')
         items = request.POST.get('items')
-        billstatus = request.POST.get('billstatus')
+        vehiclerent = request.POST.get('vehiclerent')
+        _billstatus = request.POST.get('billstatus')
         subtotal = request.POST.get('subtotal')
         discount = request.POST.get('discount')
         grandtotal = request.POST.get('grandtotal')
 
         print(items)
-        items = json.loads(items)
-        jsondata = {'items': items, 'subtotal': subtotal, 'discount': discount, 'grandtotal': grandtotal}
+        try:
+            items = json.loads(items)
+        except JSONDecodeError:
+            items = {"items": [["None","None", "None"]], "subtotal": "None", "discount":"None", "grandtotal":"None"}
+
+
+        jsondata = {'items': items,'vehiclerent':vehiclerent, 'subtotal': subtotal, 'discount': discount, 'grandtotal': grandtotal}
         jsondata = json.dumps(jsondata)
 
         # Handling Central Stock
@@ -243,7 +282,7 @@ def reviewbill(request,pk=None):
         obj.billstatus = True
         obj.client = _customer
 
-        if billstatus == 'false':
+        if _billstatus == 'opened':
             for i in items:
                 _product = stock.objects.get(productname=i[0])
                 _product.quantity = _product.quantity - int(i[1])
@@ -252,8 +291,8 @@ def reviewbill(request,pk=None):
             for i in items:
                 _product = stock.objects.get(productname=i[0])
                 _product.quantity = _product.quantity + int(i[1])
-                obj.billstatus = True
                 _product.save()
+            obj.billstatus = _billstatus
         obj.save()
 
         return redirect('/bills')
@@ -277,7 +316,6 @@ def laborbook(request):
     return render(request, "core/laborbook.html", {'labors': labors})
 
 def attendancemanagement(request):
-    print(timezone.now())
     attendances, status = attendance.objects.get_or_create(date=timezone.now())
 
     labors = labor.objects.all()
@@ -289,7 +327,7 @@ def attendancemanagement(request):
             _labor = labors.get(laborname=i)
             attendances.absentees.add(_labor)
             sal = salaryobj.objects.get(employee=_labor)
-            sal.absentdays+=1
+            sal.update_absentdays(value=1)
             sal.save()
 
     return render(request, "core/attendancemanagement.html", {'attendance': attendances, 'labors':labors, 'status':status})
@@ -299,5 +337,21 @@ def attendancerecords(request):
     labors = labor.objects.all()
     return render(request, "core/attendancerecord.html", {'attendance': attendances, 'labors':labors})
 
+def testinvoice(request, pk):
+    _bill = bill.objects.get(id=pk)
+    _stock = stock.objects.all()
+    
+    stocks = stock.objects.values_list('productname')
+    stocks = json.dumps(list(stocks.values()))
+    return render(request, 'core/printtemplate.html', {'bill':_bill, 'stock': stocks})
+
+def printinvoice(request, pk):
+    _bill = bill.objects.get(id=pk)
+    return render(request, 'core/printdocument.html')
+
 def prindoc(request):
     return render(request, 'core/printdocument.html')
+
+# def monthlyreport(request):
+#     m = MonthlyReport.objects.get_or_create(month=months[timezone.localdate().month])
+    

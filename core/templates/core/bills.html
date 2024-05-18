@@ -82,8 +82,10 @@
                             </a>
                         </th>
                         <td class="px-6 py-4">
-                            {% if bill.billstatus == False %}
-                                Open
+                            {% if bill.billstatus == 'arbitrary' %}
+                                Cash Pending
+                            {% elif bill.billstatus == 'opened' %}
+                                Opened
                             {% else %}
                                 Closed
                             {% endif %}

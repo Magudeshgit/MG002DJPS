@@ -1,0 +1,207 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvenTrove | Edit labor</title>
+    {% tailwind_css %}
+</head>
+<body>
+    <section class="sm:ml-56 px-6 pb-4 max-w-full min-h-[100%]">
+    <div class="relative">
+        {% include 'core/navigation.html' %}
+    </div>
+    <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
+        <div>
+            <p class="font-inter font-semibold text-xl">Labor Salary</p> 
+        </div>
+        <div class="items-center gap-4 hidden sm:flex">
+            <p class="date"></p>
+            <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
+                <p class="text-slate-300">M</p>
+            </div>
+        </div>
+        {% if created %}
+        <div id="toast-success" class="absolute right-0 top-0 z-10 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert" onload="toastMessage()">
+            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                </svg>
+                <span class="sr-only">Check icon</span>
+            </div>
+            <div class="ms-3 text-sm font-normal">Labor edited successfully.</div>
+            <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-success" aria-label="Close">
+                <span class="sr-only">Close</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+            </button>
+        </div>
+        {% endif %}
+    </div>
+    <div class="flex gap-2">
+        <a href="/laborbook">
+        <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
+            Labor book
+            <img src="{% static  'images/Arrow right.svg' %}" alt="plus">
+        </button>
+        </a>
+    </div>
+    <main class="w-full h-full">
+        <form method="POST" class="max-w-[900px] h-full mt-4 p-4 bg-white rounded-md shadow-md form">
+            {% csrf_token %}
+            <div class="w-full">
+                <label for="productname" class="block text-sm font-medium leading-6 text-gray-900">பெயர்</label>
+                <div class="mt-1">
+                  <input id="productname" name="laborname" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.employee}}">
+                  <p class="customer_err text-xs text-red-600"></p>
+                </div>
+            </div>
+
+            <div class="w-full mt-2">
+                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">விடுமுறை எண்ணிக்கை</label>
+                <div class="mt-1">
+                  <input id="category" name="absentdays" disabled autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.absentdays}}">
+                  <p class="customer_err text-xs text-red-600"></p>
+                </div>
+            </div>
+            <p class="block text-sm mt-4 font-bold leading-6 text-gray-900">பரிவர்த்தனை பதிவு</p>
+            <table class="text-sm mt-4 text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md shadow-md overflow-x-auto w-full">
+                <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            பற்று
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            காரணம்
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            தொகை
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            தேதி
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="tablewrapper">
+                </tbody>
+            </table>
+            
+            <!-- Cash Withdrawal -->
+            <div class="w-full mt-2 flex gap-2 flex-wrap">
+                <div class="mt-1 grow">
+                  <label for="withdrawal" class="block text-sm font-medium leading-6 text-gray-900">பணப்பற்று</label>
+                  <select name="type" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername">
+                    <option value="" selected disabled>-</option>
+                    <option value="Addition">கூடுதல் ஊதியம்</option>
+                    <option value="Subtract">கூலி கழிக்க</option>
+                  </select>
+                  <p class="customer_err text-xs text-red-600"></p>
+                </div>
+
+                <div class="mt-1 grow">
+                    <label for="withdrawal" class="block text-sm font-medium leading-6 text-gray-900">காரணம்</label>
+                    <input id="withdrawal" name="reason" autocomplete="off" type="text"  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.withdrawal}}">
+                    <p class="customer_err text-xs text-red-600"></p>
+                  </div>
+
+                <div class="mt-1 grow">
+                <label for="withdrawal" class="block text-sm font-medium leading-6 text-gray-900">தொகை</label>
+                <input id="withdrawal" name="amount" autocomplete="off" type="text"  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.withdrawal}}">
+                <p class="customer_err text-xs text-red-600"></p>
+                </div>
+
+                <div class="mt-1 grow">
+                    <label for="date" class="block text-sm font-medium leading-6 text-gray-900">Date</label>
+                  <input id="date" name="date" autocomplete="off" type="date" value="" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.withdrawal}}">
+                  <p class="customer_err text-xs text-red-600"></p>
+                </div>
+            </div>
+
+            <!-- Cash Addition -->
+            <div class="mt-1 grow">
+                <label for="salaryremain" class="block text-sm font-medium leading-6 text-gray-900">சம்பளம் பாக்கி</label>
+              <input id="salaryremain" name="address" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.salarydue}}">
+              <p class="customer_err text-xs text-red-600"></p>
+            </div>
+
+            <div class="flex gap-2 mt-4">
+                <button class="px-2 py-2 bg-[#4ae450] flex items-center rounded-md text-slate-50 text-sm">
+                    சேர்
+                    <img src="{% static  'images/Plus.svg' %}" alt="plus">
+                </button>
+            </div>
+        </form>
+    </main>
+    </section>  
+    <p class="jsondata hidden">{{transacts}}</p>
+    <script>
+        const edt = document.querySelector('.jsondata').innerText
+        let date = document.querySelector('.date')
+        const dt = new Date().toDateString().split(' ')
+        date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
+        let _date = document.querySelector('#date')
+        _date.value = toDateInputValue(new Date())
+        
+        // Populating Transaction Table
+        const tbw = document.querySelector('.tablewrapper')
+        let d = JSON.parse(edt)
+        console.log(d)
+        d['transaction'].forEach(transact => {
+            console.log("kl", transact)
+            const tr = document.createElement('tr')
+            tr.setAttribute('scope', 'row')
+            tr.setAttribute('class', 'px-6 py-4 font-medium text-gray-900 whitespace-nowrap')
+
+            // transact_title
+            const title_col = document.createElement('td')
+            const title = document.createElement('p')
+            title.setAttribute('class', 'px-6 py-4')
+            title.innerText = ((transact[0] === 'Addition')?'கூட்டல்':'கழித்தல்')
+            title_col.append(title)
+
+             // transact_Reason
+            const reason_col = document.createElement('td')
+            const reason = document.createElement('p')
+            reason.setAttribute('class', 'px-6 py-4')
+            reason.innerText = transact[1]
+            reason_col.append(reason)
+
+             // transact_amount
+            const amount_col = document.createElement('td')
+            const amount = document.createElement('p')
+            amount.setAttribute('class', 'px-6 py-4')
+            amount.innerText = '₹' + transact[2]
+            amount_col.append(amount)
+
+             // transact_date
+            const date_col = document.createElement('td')
+            const date = document.createElement('p')
+            date.setAttribute('class', 'px-6 py-4')
+            date.innerText = transact[3]
+            date_col.append(date)
+
+            tr.append(title_col)
+            tr.append(reason_col)
+            tr.append(amount_col)
+            tr.append(date_col)
+
+            tbw.append(tr)
+        });        
+        
+        function toastMessage(e) {
+            setTimeout(()=>{
+                e.target.parentNode.remove(e.target)
+            },5000)
+        }
+
+        function toDateInputValue(dateObject){
+        const local = new Date(dateObject);
+        local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
+        return local.toJSON().slice(0,10);
+    };
+
+    </script>
+</body>
+</html>

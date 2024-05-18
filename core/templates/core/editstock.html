@@ -52,7 +52,15 @@
         <form method="POST" class="max-w-[900px] h-full mt-4 p-4 bg-white rounded-md shadow-md form">
             {% csrf_token %}
             <div class="w-full">
-                <label for="productname" class="block text-sm font-medium leading-6 text-gray-900">Item name</label>
+                <label for="productname" class="block text-sm font-medium leading-6 text-gray-900">எண்</label>
+                <div class="mt-1">
+                  <input autocomplete="off" disabled type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.id}}">
+                  <p class="customer_err text-xs text-red-600"></p>
+                </div>
+            </div>
+
+            <div class="w-full">
+                <label for="productname" class="block text-sm font-medium leading-6 text-gray-900">பொருள்</label>
                 <div class="mt-1">
                   <input id="productname" name="productname" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.productname}}">
                   <p class="customer_err text-xs text-red-600"></p>
@@ -60,7 +68,7 @@
             </div>
 
             <div class="w-full mt-2">
-                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Category</label>
+                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">வகை</label>
                 <div class="mt-1">
                   <input id="category" name="category" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.category}}">
                   <p class="customer_err text-xs text-red-600"></p>
@@ -68,7 +76,7 @@
             </div>
 
             <div class="w-full mt-2">
-                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Quantity</label>
+                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">எண்ணிக்கை</label>
                 <div class="mt-1">
                   <input id="category" name="quantity" autocomplete="off" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.quantity}}">
                   <p class="customer_err text-xs text-red-600"></p>
@@ -76,7 +84,7 @@
             </div>
 
             <div class="w-full mt-2">
-                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Price</label>
+                <label for="category" class="block text-sm font-medium leading-6 text-gray-900">வாடகை விலை/நாள்</label>
                 <div class="mt-1">
                   <input id="category" name="price" autocomplete="off" type="number" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 customername" value="{{editinfo.price}}">
                   <p class="customer_err text-xs text-red-600"></p>

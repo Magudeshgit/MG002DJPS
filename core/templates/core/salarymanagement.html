@@ -63,7 +63,7 @@
             <span class="w-[1px] h-[50px] bg-slate-700 rounded-md"></span>
             <div>
                 <p class="text-xs">சம்பள தேதி</p>
-                <p class="text-2xl font-semibold">10,May,2024</p>
+                <p class="text-2xl font-semibold saldate"></p>
             </div>
         </div>
 
@@ -87,8 +87,9 @@
                             {% for i in salary %}
                             <tr class="border-b">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    <a href="{% url 'editcustomer' i.id%}" class="hover:underline">
+                                    <a href="{% url 'editsalary' i.id%}" class="hover:underline">
                                     {{i.employee}}
+                                    {{i.id}}
                                     </a>
                                 </th>
                                 <td class="px-6 py-4">
@@ -107,8 +108,17 @@
     </section> 
     <script>
         date = document.querySelector('.date')
-        const dt = new Date().toDateString().split(' ')
+        let saldate = document.querySelector('.saldate')
+        let sysdate = new Date()
+        dt = sysdate.toDateString().split(' ')
         date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
+        
+
+        let Months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ]
+        saldate.innerText =  `10,${Months[sysdate.getMonth()]},${sysdate.getFullYear()}`
     </script>
 </body>
 </html>

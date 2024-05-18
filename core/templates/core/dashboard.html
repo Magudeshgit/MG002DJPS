@@ -51,7 +51,13 @@
         <a href="/salarymanagement" class="w-[420px] max-h-[115px]">
         <div class="box max-w-full p-5 bg-gradient-to-r from-[#BEE6A1] to-[#E0F3D6] rounded-md hover:scale-105 transition duration-500">
             <p class="text-xs">சம்பளம் கணக்கீடு</p>
-            <p class="text-2xl font-semibold">₹{{salarydue}}</p>
+            <p class="text-2xl font-semibold">
+                {% if salarydue == None %}
+                    0
+                {% else %}
+                {{salarydue}}
+                {% endif %}
+            </p>
         </div>
         </a>
 

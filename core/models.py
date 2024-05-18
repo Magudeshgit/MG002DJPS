@@ -31,7 +31,8 @@ class bill(models.Model):
     client = models.ForeignKey(client, on_delete=models.CASCADE, blank=True)
     #billno = models.CharField(max_length=10, blank=True)
     billdate = models.DateField(auto_now_add=True, blank=True)
-    billstatus = models.BooleanField(default=False) #Bill Closed/Open
+    # billstatus = models.BooleanField(default=False) #Bill Closed/Open
+    billstatus = models.CharField(max_length=15,blank=True) #Bill Closed/Open
     products = models.JSONField(blank=True) #Will hold product name/quantiy and bill pricing details(discount/grandtotal/subtotal)
     grandtotal = models.CharField(max_length=10,blank=True)
 
@@ -56,7 +57,7 @@ class labor(models.Model):
     address = models.TextField()
     salarystatus = models.BooleanField(default=False)
     day_wage = models.PositiveIntegerField(blank=True)
-    salary_amount = models.PositiveBigIntegerField(blank=True)
+    salary_amount = models.PositiveBigIntegerField(blank=True) #Remove these and link with salary management fields
 
     def __str__(self):
         return self.laborname
@@ -78,6 +79,20 @@ class salarymanagement(models.Model):
     employee = models.ForeignKey(labor, on_delete=models.CASCADE)
     absentdays = models.PositiveIntegerField(default=0, blank=True)
     salarydue = models.PositiveIntegerField(blank=True)
+    transaction = models.JSONField(blank=True, null=True)
+
+    def update_absentdays(self, value):
+        self.absentdays+=value
+        self.salarydue =  self.employee.salary_amount - (self.employee.day_wage * self.absentdays)
+        self.save()
 
     def __str__(self):
         return str(self.employee)
+    
+# class MonthlyReport(models.Model):
+#     month = models.CharField(max_length=50)
+#     salesamount=models.PositiveIntegerField(blank=True)
+#     salaryamount=models.PositiveIntegerField(blank=True)
+
+#     def __str__(self):
+#         return self.month

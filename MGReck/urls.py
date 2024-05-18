@@ -48,6 +48,10 @@ urlpatterns = [
     path('attendancerecord/', cvs.attendancerecords),
 
     path('salarymanagement/', cvs.salarymanagement),
+    path('editsalary/<pk>/', cvs.editsalary, name='editsalary'),
+
+    path('printing/<pk>', cvs.testinvoice, name='print'),
+    path('print/<pk>/', cvs.printinvoice),
 
     # Email Verification & Password Reset
     path('activate/<str:uidb64>/<str:token>/', avs.activation, name='activate'),

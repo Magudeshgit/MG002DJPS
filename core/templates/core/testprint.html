@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://printjs-4de6.kxcdn.com/print.min.css" rel="stylesheet">
+</head>
+<body>
+    
+    
+    <script>
+    function printDocument()
+        {
+            printJS({
+                printable: 'form',
+                type: 'html',
+                header: '<div style="display: flex; align-items: center; justify-content: space-between"><div><p><b style="font-size: 24px">ஸ்ரீ வெங்கடேஸ்வரா ஸ்டோர்ஸ்</b><br>பாத்திர வாடகைக்கடை, PVC பந்தல்<br>3/269A, தாராபுரம் ரோடு,<br>கொங்கல் நகரம் - 642 205</p><br></div><div><p>Bill No:112<br>Date: 11-05-2024</p></div></div>',
+                headerStyle: 'font-size: 24px',
+                ignoreElements: ['items','discount','ctagrp','removebtn'],
+                style: '.grandtotal{font-size: 24px; font-weight: bold}'
+            })
+        }
+    </script>
+</body>
+</html>
