@@ -41,6 +41,12 @@ def dashboard(request):
 
 def stocks(request):
     stocks = stock.objects.all()
+    if request.method == 'POST':
+        i = request.POST.get('id')
+        c = stock.objects.filter(Q(id__icontains=i) | Q(productname__icontains = i))
+        print(c)
+        return render(request, "core/stocks.html", {'stocks':c}) 
+
     return render(request, "core/stocks.html", {'stocks':stocks})
 
 def incomingstocks(request):

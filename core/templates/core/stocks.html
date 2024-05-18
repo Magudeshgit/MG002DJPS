@@ -21,12 +21,18 @@
         <div>
             <p class="font-inter font-semibold text-xl">அனைத்து பொருட்கள்</p> 
         </div>
-        <div class="items-center gap-4 hidden sm:flex">
-            <p class="date"></p>
-            <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
-                <p class="text-slate-300">M</p>
+        <form method="POST">
+            <div class="searchbar w-full flex gap-3 sm:flex-wrap">
+                    {%csrf_token%}
+                    <input id="customer" name="id" autocomplete="off" type="text" required placeholder="வாடிக்கையாளர் பெயர்/எண்" class="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <button class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm">
+                        தேடு
+                        <img src="{% static  'images/Search.svg' %}" alt="plus">
+                    </button>
+                
             </div>
-        </div>
+        </form>
+    
     </div>
     <main class="mt-4 min-w-full h-full">
     <!-- Table -->
@@ -51,6 +57,9 @@
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
+                            எண்
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             பொருட்கள்
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -70,6 +79,11 @@
                 <tbody>
                     {% for stock in stocks %}
                     <tr class="border-b">
+                        <th scope="row" class="hover:underline px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            <a href="{% url 'editstock' stock.id%}">
+                            {{stock.id}}
+                            </a>
+                        </th>
                         <th scope="row" class="hover:underline px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                             <a href="{% url 'editstock' stock.id%}">
                             {{stock.productname}}
