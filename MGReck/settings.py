@@ -50,6 +50,8 @@ INSTALLED_APPS = [
 
     'tailwind',
     'theme',
+
+    'import_export',
 ]
 
 # Tailwind Configs
