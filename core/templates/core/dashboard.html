@@ -91,6 +91,9 @@
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
+                            எண்
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             பொருட்கள்
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -111,6 +114,9 @@
                     {% for stock in overviewdata %}
                     <tr class="border-b">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {{stock.id}}
+                        </th>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                             {{stock.productname}}
                         </th>
                         <td class="px-6 py-4">
@@ -123,13 +129,13 @@
                             {{stock.price}}
                         </td>
                         <td class="px-6 py-4">
-                            {% if stock.quantity > 25 %}
+                            {% if stock.quantity < stock.maximumstock %}
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+                                Running out
+                            </span>
+                            {% else %}
                                 <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
                                     In stock
-                                </span>
-                            {% else %}
-                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
-                                    Running out
                                 </span>
                             {% endif %}
                         </td>

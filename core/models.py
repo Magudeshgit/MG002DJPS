@@ -5,7 +5,7 @@ import json
 
 class stock(models.Model):
     productname = models.CharField(max_length=70, db_index=True)
-    category = models.CharField(max_length=50)
+    category = models.CharField(max_length=50, blank=True)
     maximumstock = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField()
     price = models.PositiveIntegerField()

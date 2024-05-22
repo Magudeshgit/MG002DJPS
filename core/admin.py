@@ -1,10 +1,10 @@
 from django.contrib import admin
 from .models import *
-from import_export.admin import ExportActionMixin   
+from import_export.admin import ImportExportModelAdmin   
 
 # Register your models here.
 
-class stockexport(ExportActionMixin, admin.ModelAdmin):
+class stockexport(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('id', 'productname', 'maximumstock', 'quantity','price')
 
 admin.site.register([client,

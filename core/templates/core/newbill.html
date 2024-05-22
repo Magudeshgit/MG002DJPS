@@ -204,6 +204,7 @@
 
     // **Main
 
+
     // Autocomplete for Customer Name Input
     customer.addEventListener('input', ()=>{
         clientdata.forEach(element => {
@@ -232,7 +233,7 @@
         stockdata.forEach(element => {
             //CORRECTION REMOVAL(17/5/2024: 6:25pm) - element.productname.toLowerCase().includes(product.value.toLowerCase()) && !trackset.has(element.productname)
             console.log('DEBUG', element.id.toString().includes(product.value))
-            if (element.id.toString().includes(product.value) && !trackset.has(element.productname)){
+            if (element.id.toString() === product.value && !trackset.has(element.productname)){
                         option = document.createElement("option")
                         option.innerHTML = `<p>#${element.id}&nbsp&nbsp</p><p>${element.productname}</p>`
                         option.setAttribute('value', element.productname)
@@ -289,8 +290,9 @@
         quantity_row.setAttribute('class', 'flex items-center gap-2')
         quantity_row.append(quantity_input)
 
-        
-        if (productobj.productname === 'PVC பந்தல்' || productobj.productname === 'Carpet') //Change after stock entry!
+        // Measurement based billing products
+        const beta_prods = ['PVC பந்தல்', 'Carpet (Flower Red)', 'Carpet (Red)', 'Carpet (Red)', 'Carpet (Green)']
+        if (beta_prods.includes(productobj.productname)) //Change after stock entry!
         {
             let measure_txt = document.createElement('p').innerText = 'Sqft'
             quantity_row.append(measure_txt)
@@ -301,7 +303,14 @@
         const instock_row = document.createElement('td')
         const instock = document.createElement('p')
         instock.setAttribute('class', 'px-6 py-4')
-        instock.innerText = productobj.quantity
+        if (!beta_prods.includes(product.productname))
+        {
+            instock.innerText = '-'
+        }
+        else
+        {
+            instock.innerText = productobj.quantity
+        }
 
         instock_row.append(instock)
         
@@ -309,7 +318,14 @@
         const price_row = document.createElement('td')
         const price = document.createElement('p')
         price.setAttribute('class', 'px-6 py-4')
-        price.innerText = productobj.price
+        if (!beta_prods.includes(product.productname))
+        {
+            price.innerText = productobj.price + '/sqft'
+        }
+        else
+        {
+            price.innerText = productobj.price
+        }
         priceset.push([productobj.productname,productobj.price])
         price_row.append(price)
 

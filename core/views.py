@@ -227,6 +227,10 @@ def bills(request):
     return render(request, "core/bills.html", context)
 
 def newbill(request):
+
+    # Measurement Based Billing Materials Initialization
+    measitems = ['PVC பந்தல்', 'Carpet (Flower Red)', 'Carpet (Red)', 'Carpet (Green)']
+
     if request.method == 'POST':
         customer = request.POST.get('customer')
         items = request.POST.get('items')
@@ -242,9 +246,10 @@ def newbill(request):
         print('data',items)
         if billstatus == 'opened':
             for i in items:
-                _product = stock.objects.get(productname=i[0])
-                _product.quantity = _product.quantity - int(i[1])
-                _product.save()
+                if not i[0] in measitems:
+                    _product = stock.objects.get(productname=i[0])
+                    _product.quantity = _product.quantity - int(i[1])
+                    _product.save()
 
         _customer, status = client.objects.get_or_create(clientname=customer)
         new_bill = bill.objects.create(client=_customer,products=jsondata,billstatus=billstatus,grandtotal=int(grandtotal))   
