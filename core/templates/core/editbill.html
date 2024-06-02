@@ -36,7 +36,7 @@
         </div>  
 
         <div>
-            <p class="font-inter font-semibold text-xl">ரசீது மாற்றம்</p> 
+            <p class="font-inter font-semibold text-xl billhead">ரசீது மாற்றம்</p> 
         </div>
     </div>
     <main class="mt-4 min-w-full h-full">
@@ -74,7 +74,7 @@
 
         </div>
         <div class="w-full mt-4" id="items">
-            <label for="items" class="block text-sm font-medium leading-6 text-gray-900">பொருட்கள் சேர்</label>
+            <label for="items" class="block text-sm font-medium leading-6 text-gray-900 productlabel">பொருட்கள் சேர்</label>
             <div class="mt-1">
               <input id="items" list="products" name="items" type="text" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products">
               <datalist id="products" class="bg-gray-50  text-gray-900 text-sm rounded-lg flex flex-col"></datalist>
@@ -137,15 +137,13 @@
         </div>
         <div class="flex gap-2 mt-4 flex-wrap" id="ctagrp">
             <button data-status="false" class="px-2 py-2 bg-[#564AE4] flex items-center rounded-md gap-2 text-slate-50 text-sm genbill">
-                மாற்றியமைக்க
+                மாற்றியமைக்க 
                 <img src="{% static  'images/Plus.svg' %}" alt="plus">
             </button>
-            {% if bill.billstatus != 'arbitrary' %}
             <button data-status="arbitrary" class="px-2 py-2 bg-[#e7ba26] flex items-center rounded-md gap-2 text-slate-50 text-sm stockclose">
                 பொருள் வருகை
                 <img src="{% static  'images/istock.svg' %}" alt="plus">
             </button>
-            {% endif %}
             <button data-status="true" class="px-2 py-2 bg-[#4FC354] flex items-center rounded-md gap-2 text-slate-50 text-sm closebill">
                 கணக்கு முடிந்தது
                 <img src="{% static  'images/done.svg' %}" alt="plus">
@@ -156,6 +154,7 @@
     <p class="misc hidden">{{clients}}</p>
     <p class="misc hidden">{{items}}</p>
     <p class="misc hidden">{{customer}}</p>
+    <p class="misc hidden">{{bill.billstatus}}</p>
     </main>
 </section>
 <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
@@ -165,12 +164,16 @@
     const stockdata = JSON.parse(misc[0].innerHTML)
     const clientdata = JSON.parse(misc[1].innerHTML)
     const editinfo = JSON.parse(misc[2].innerHTML)
+    const billstatus = misc[4].innerHTML
 
     //DOM Attributes
     const customer = document.querySelector('.customername')
     const datalist  = document.querySelector('#clients')
     
+    const billhead = document.querySelector('.billhead')
+
     const product = document.querySelector('.products')
+    const productlabel = document.querySelector('.productlabel')
     const prod_datalist  = document.querySelector('#products')
     const table  = document.querySelector('.tablewrapper')
     table.innerHTML = ''
@@ -206,13 +209,13 @@
     // Global declarations
     let subtotalvalue, grandtotalvalue, discountvalue;
     const payload =  []
+    const beta_prods = ['PVC பந்தல்', 'Carpet (Flower Red)', 'Carpet (Red)', 'Carpet (Red)', 'Carpet (Green)']
 
 
     // **Main
 
-    // Pre-Intializing form
+    // Pre-Initializing form
     customer.value = misc[3].innerText
-    console.log(editinfo.items)
 
     editinfo.items.forEach(e=>
     {
@@ -243,13 +246,29 @@
         quantity_input.setAttribute('class', 'flex text-center rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
         quantity_input.setAttribute('disabled', 'true')
         quantity_input.addEventListener('input', _quantitypricing)
+
+        quantity_row.setAttribute('class', 'flex items-center gap-2')
         quantity_row.append(quantity_input)
+
+        // Measurement based billing
+        if (beta_prods.includes(product.productname))
+        {
+            let measure_txt = document.createElement('p').innerText = 'Sqft'
+            quantity_row.append(measure_txt)
+        }
 
         // Available stock column
         const instock_row = document.createElement('td')
         const instock = document.createElement('p')
         instock.setAttribute('class', 'px-6 py-4')
-        instock.innerText = product.quantity 
+        if (beta_prods.includes(product.productname))
+        {
+            instock.innerText = '-'
+        }
+        else
+        {
+            instock.innerText = product.quantity
+        }
 
         instock_row.append(instock)
         
@@ -257,10 +276,15 @@
         const price_row = document.createElement('td')
         const price = document.createElement('p')
         price.setAttribute('class', 'px-6 py-4')
-        price.innerText = product.price
-        console.log(product.price)
+        if (beta_prods.includes(product.productname))
+        {
+            price.innerText = product.price + '/sqft'
+        }
+        else
+        {
+            price.innerText = product.price
+        }
         priceset.push([product.productname, product.price])
-        console.log('sdsd',priceset)
         price_row.append(price)
 
         // Date Rented
@@ -296,12 +320,10 @@
         table.append(tr)
         
         
-        console.log(product.productname, e[1])
         _updateprice()
         _quantitypricing(null, product.productname, e[1])
-        console.log('dfdf',null, product.productname, e[2], e[1])
         _DatewiseBilling(null, product.productname, e[2], e[1])
-        console.log(priceset)
+
     })
 
     discount_input.value = editinfo.discount
@@ -309,7 +331,21 @@
     vehicle_rent(vh=parseInt(editinfo.vehiclerent))
     _updateprice(discountpercent=parseInt(editinfo.discount))
 
+    // Managing Buttons
+    if (billstatus === 'arbitrary')
+    {
+        stockclose.style.display = 'None'
+    }
+    else if (billstatus === 'closed')
+    {
+        product.style.display = 'None'
+        productlabel.style.display  = 'None'
+        genbill.style.display = 'None'
+        stockclose.style.display = 'None'
+        closebill.style.display = 'None'
 
+        billhead.innerText = 'ரசீது மாற்றம் - Closed'
+    }
 
     // Autocomplete for Customer Name Input
     customer.addEventListener('input', ()=>{
@@ -335,22 +371,25 @@
     // Autocomplete for Product Name Input
     product.addEventListener('input', ()=>{
         stockdata.forEach(element => {
-            console.log(element.productname.toLowerCase().includes(product.value.toLowerCase()))
-            if (element.productname.toLowerCase().includes(product.value.toLowerCase()) && !trackset.has(element.productname)){
+            if (element.id.toString() === product.value && !trackset.has(element.productname)){
                         const option = document.createElement("option")
-                        option.innerText = element.productname
+                        option.innerHTML = `<p>#${element.id}&nbsp&nbsp</p><p>${element.productname}</p>`
                         option.setAttribute('value', element.productname)
                         option.setAttribute('class', 'px-4 py-2 border-b')
                         option.addEventListener('click', changeInput_prod)
                         prod_datalist.append(option)
-                        trackset.add(element.productname)
             }
         });
+        if (product.value === '')
+        {
+            prod_datalist.innerHTML = ''
+        }
         })
 
     // Handling Data table for billed items. Handles new product addition!
 
     function changeInput_prod(e) {
+        trackset.add(e.target.value)
         product.value = e.target.value
         e.target.parentNode.innerHTML = ''
 
@@ -384,14 +423,31 @@
         quantity_input.setAttribute('placeholder', 'Quantity')
         quantity_input.setAttribute('type', 'number')
         quantity_input.addEventListener('input', _quantitypricing)
+        
+        quantity_row.setAttribute('class', 'flex items-center gap-2')
         quantity_row.append(quantity_input)
+
+        // Measurement based billing products
+        if (beta_prods.includes(productobj.productname)) //Change after stock entry!
+        {
+            let measure_txt = document.createElement('p').innerText = 'Sqft'
+            quantity_row.append(measure_txt)
+        }
 
 
         // Available stock column
         const instock_row = document.createElement('td')
         const instock = document.createElement('p')
         instock.setAttribute('class', 'px-6 py-4')
-        instock.innerText = productobj.quantity
+        if (beta_prods.includes(productobj.productname))
+        {
+            instock.innerText = '-'
+        }
+        else
+        {
+            instock.innerText = productobj.quantity
+        }
+
 
         instock_row.append(instock)
         
@@ -399,7 +455,15 @@
         const price_row = document.createElement('td')
         const price = document.createElement('p')
         price.setAttribute('class', 'px-6 py-4')
-        price.innerText = productobj.price
+        console.log("sdf", product)
+        if (beta_prods.includes(product.productname))
+        {
+            price.innerText = productobj.price + '/sqft'
+        }
+        else
+        {
+            price.innerText = productobj.price
+        }
 
         priceset.push([productobj.productname,productobj.price])
 
@@ -443,7 +507,6 @@
             {
                 priceset.pop(i)
                 trackset.delete(p_name)
-                console.log("removing", priceset)
             }
         })
         e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode)
@@ -455,7 +518,6 @@
 
         // Subtotal handlers
     function _updateprice(discountpercent=0) {
-        console.log(priceset)
         subtotalvalue=0        
         priceset.forEach(e=>{
             subtotalvalue += e[1]
@@ -474,7 +536,6 @@
 
         function vehicle_rent(vh)
         {
-            console.log('XXX', ['vehiclerent',vh])
             priceset.push(['vehiclerent',vh])
             _updateprice()
         }
@@ -514,12 +575,11 @@
         table.childNodes.forEach(e=>{
             payload.push([e.childNodes[1].innerText, e.childNodes[2].childNodes[0].value, e.childNodes[5].childNodes[0].value])
         })
-
+        console.log(e.target.dataset.status)
         // Appending data manually to post payload
         if (e.target.dataset.status === 'true')
         {
             Form.append("items", JSON.stringify(payload))
-            console.log(JSON.stringify(payload))
             Form.append("customer", customer.value)
             Form.append("billstatus", 'closed')
             Form.append("vehiclerent", vehiclerent.value)
@@ -533,24 +593,20 @@
             })
 
             response.then(e=>{
-                console.log("which resp 1")
                 if (e.status == 200)
                 {
                     toast.style.display = 'flex'
-                    console.log("voila")
                     location.reload()
                 }
                 else
                 {
                     toast.style.display = 'flex'
                     response_txt.innerText = 'Server Error!'
-                    console.log("lksdsl")
                 }
             })
         }
         else
         {
-            console.log('which resp 2')
             if (_formvalidator() === false) return;
             Form.append("items", JSON.stringify(payload))
             Form.append("customer", customer.value)
@@ -568,14 +624,12 @@
                 if (e.status == 200)
                 {
                     toast.style.display = 'flex'
-                    console.log("voila")
                     location.reload()
                 }
                 else
                 {
                     toast.style.display = 'flex'
                     response_txt.innerText = 'Server Error!'
-                    console.log("lksdsl")
                 }
             })
         }
@@ -622,11 +676,9 @@
     {
         if (productname!=null)
         {
-            console.log("ops")
             const prod = _getproductinfo(productname)
             const price = prod.price * quantity
             const diffdays = getDate_Difference(proddate)
-            console.log('dfgdfg',diffdays*price)
 
             priceset.forEach(e=>{
             if (e[0] === productname)
@@ -645,7 +697,6 @@
                 if (e[0] === x.target.parentNode.parentNode.childNodes[1].innerText)
                 {
                     e[1] = diffdays * price
-                    console.log(priceset)
                 }
             })
         }
@@ -683,7 +734,6 @@
     {
         const currdate = new Date(toDateInputValue(new Date()))
         const _olddate = new Date(olddate)
-        console.log(olddate, currdate)
         const timediff = Math.abs(currdate - _olddate)
         const resultant = Math.floor( timediff / (1000 * 60 * 60 * 24))
         if (resultant == 0)

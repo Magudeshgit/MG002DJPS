@@ -264,7 +264,6 @@ def newbill(request):
     return render(request, "core/newbill.html", context)
 
 def reviewbill(request,pk=None):
-    print(request.POST)
     if request.method == 'POST':
         customer = request.POST.get('customer')
         items = request.POST.get('items')
@@ -274,7 +273,8 @@ def reviewbill(request,pk=None):
         discount = request.POST.get('discount')
         grandtotal = request.POST.get('grandtotal')
 
-        print(items)
+        print(_billstatus)
+
         try:
             items = json.loads(items)
         except JSONDecodeError:
@@ -290,7 +290,6 @@ def reviewbill(request,pk=None):
         obj = bill.objects.get(id=pk)
         obj.products=jsondata
         obj.grandtotal=int(grandtotal)
-        obj.billstatus = True
         obj.client = _customer
 
         if _billstatus == 'opened':
@@ -303,7 +302,7 @@ def reviewbill(request,pk=None):
                 _product = stock.objects.get(productname=i[0])
                 _product.quantity = _product.quantity + int(i[1])
                 _product.save()
-            obj.billstatus = _billstatus
+        obj.billstatus = _billstatus
         obj.save()
 
         return redirect('/bills')

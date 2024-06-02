@@ -32,7 +32,7 @@ class bill(models.Model):
     #billno = models.CharField(max_length=10, blank=True)
     billdate = models.DateField(auto_now_add=True, blank=True)
     # billstatus = models.BooleanField(default=False) #Bill Closed/Open
-    billstatus = models.CharField(max_length=15,blank=True) #Bill Closed/Open
+    billstatus = models.CharField(max_length=15,blank=True) #Bill closed/opened/arbitrary
     products = models.JSONField(blank=True) #Will hold product name/quantiy and bill pricing details(discount/grandtotal/subtotal)
     grandtotal = models.CharField(max_length=10,blank=True)
 

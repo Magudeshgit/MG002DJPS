@@ -23,9 +23,6 @@
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p class="date"></p>
-            <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
-                <p class="text-slate-300">M</p>
-            </div>
         </div>
     </div>
     <main class="mt-4 min-w-full h-full">
@@ -68,9 +65,12 @@
                 </thead>
                 <tbody>
                     {% for stock in stocks %}
+                    {% if stock.quantity < stock.maximumstock %}
                     <tr class="border-b">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            <a href="{%url 'editstock' stock.id%}" class="underline">
                             {{stock.productname}}
+                            </a>
                         </th>
                         <td class="px-6 py-4">
                             {{stock.category}}
@@ -82,6 +82,7 @@
                             {{stock.price}}
                         </td>
                     </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>
             </table>

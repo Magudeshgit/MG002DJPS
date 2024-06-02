@@ -39,9 +39,6 @@
         </div>
         <div class="items-center gap-4 hidden sm:flex">
             <p class="date"></p>
-            <div class="w-8 h-8 bg-green-600 rounded-full items-center justify-center flex">
-                <p class="text-slate-300">M</p>
-            </div>
         </div>
     </div>
     <main class="mt-4 min-w-full h-full">
@@ -199,7 +196,8 @@
 
     // Global declarations
     let vehiclerentvalue, subtotalvalue, grandtotalvalue, discountvalue;
-    const payload =  []
+    const payload =  [];
+    const beta_prods = ['PVC பந்தல்', 'Carpet (Flower Red)', 'Carpet (Red)', 'Carpet (Red)', 'Carpet (Green)']
 
 
     // **Main
@@ -227,12 +225,10 @@
     }
 
     // Autocomplete for Product Name Input
-    console.log(stockdata)
     product.addEventListener('input', ()=>{
         let option;
         stockdata.forEach(element => {
             //CORRECTION REMOVAL(17/5/2024: 6:25pm) - element.productname.toLowerCase().includes(product.value.toLowerCase()) && !trackset.has(element.productname)
-            console.log('DEBUG', element.id.toString().includes(product.value))
             if (element.id.toString() === product.value && !trackset.has(element.productname)){
                         option = document.createElement("option")
                         option.innerHTML = `<p>#${element.id}&nbsp&nbsp</p><p>${element.productname}</p>`
@@ -291,7 +287,7 @@
         quantity_row.append(quantity_input)
 
         // Measurement based billing products
-        const beta_prods = ['PVC பந்தல்', 'Carpet (Flower Red)', 'Carpet (Red)', 'Carpet (Red)', 'Carpet (Green)']
+        console.log(beta_prods)
         if (beta_prods.includes(productobj.productname)) //Change after stock entry!
         {
             let measure_txt = document.createElement('p').innerText = 'Sqft'
@@ -303,7 +299,8 @@
         const instock_row = document.createElement('td')
         const instock = document.createElement('p')
         instock.setAttribute('class', 'px-6 py-4')
-        if (!beta_prods.includes(product.productname))
+        console.log("stockcol", beta_prods.includes(productobj.productname))
+        if (beta_prods.includes(productobj.productname))
         {
             instock.innerText = '-'
         }
@@ -318,7 +315,7 @@
         const price_row = document.createElement('td')
         const price = document.createElement('p')
         price.setAttribute('class', 'px-6 py-4')
-        if (!beta_prods.includes(product.productname))
+        if (beta_prods.includes(productobj.productname))
         {
             price.innerText = productobj.price + '/sqft'
         }
@@ -505,19 +502,7 @@
             customer_err.innerText = 'Please fill out this field'
             return false
         }
-        // if (
-        // payload.forEach(e=>{
-        //     console.log(e)
-        //     if (e[1] > _getproductinfo(e[0]).quantity)
-        //     {
-        //         quantity_err.innerText = 'quantity exceeds available stock of ' + e[0]
-        //         return false
-        //     }
-        // }) === false)
-        // {
-        //     // payload = []
-        //     return false
-        // }
+
         for (let index = 0; index < payload.length; index++) {
             if (payload[index][1] > _getproductinfo(payload[index][0]).quantity)
             {
