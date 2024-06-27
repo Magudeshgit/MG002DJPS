@@ -19,7 +19,7 @@
     {% include 'core/navigation.html' %}
     </div>
     <div class="flex justify-between w-full items-center sm:mt-12 mt-6">
-        <div id="toast-success" class="absolute toast right-0 top-0 z-10 hidden items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert" onload="toastMessage()">
+        <div id="toast-success" class="fixed toast right-0 top-0 z-10 hidden items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert" onload="toastMessage()">
             <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
@@ -83,7 +83,7 @@
         </div>
 
         <!-- Billed items -->
-        <div class="relative max-w-[100%] min-h-full overflow-x-scroll mt-4 rounded-md bg-red-500">
+        <div class="relative max-w-[100%] max-h-[500px] overflow-scroll mt-4 rounded-md bg-red-500">
             <table id="tabler" class="text-sm text-left min-h-full text-gray-500 bg-white dark:text-gray-400 rounded-md shadow-md overflow-x-auto w-full">
                 <thead class="border-b text-xs text-gray-900 uppercase dark:text-gray-400">
                     <tr>
@@ -208,7 +208,7 @@
 
     // Global declarations
     let subtotalvalue, grandtotalvalue, discountvalue;
-    const payload =  []
+    let payload =  []
     const beta_prods = ['PVC பந்தல்', 'Carpet (Flower Red)', 'Carpet (Red)', 'Carpet (Red)', 'Carpet (Green)']
 
 
@@ -501,6 +501,7 @@
     // Remove function for added products
     function remove_prod(e) {
         const product = _getproductinfo(e.target.parentNode.parentNode.childNodes[1].innerText)
+        console.log(product)
         priceset.forEach(i=>{
             let p_name = product.productname
             if (i[0] === p_name)
@@ -571,8 +572,10 @@
 
         const Form = new FormData(form)
         const itemdata = new Array()
-
+        console.log("Billing", payload)
+        payload = []
         table.childNodes.forEach(e=>{
+            console.log(e)
             payload.push([e.childNodes[1].innerText, e.childNodes[2].childNodes[0].value, e.childNodes[5].childNodes[0].value])
         })
         console.log(e.target.dataset.status)

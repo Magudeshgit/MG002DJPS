@@ -273,7 +273,6 @@ def reviewbill(request,pk=None):
         discount = request.POST.get('discount')
         grandtotal = request.POST.get('grandtotal')
 
-        print(_billstatus)
 
         try:
             items = json.loads(items)

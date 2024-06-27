@@ -21,7 +21,6 @@ body
 main
 {
     width: 100%;
-    height: 270mm;
     border: 1px solid black;
     position: relative;
     padding: 15px;
@@ -90,15 +89,12 @@ table {
 .gdt
 {
     margin-top: 15px;
-    font-size: 30px;
+    /* font-size: px; */
     font-weight: bold;
 }
 .footer
 {
     text-align: center;
-    font-size: 12px;
-    margin-top: 20px;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
+    font-size: 14px;
+    margin-top: 25px;
 }

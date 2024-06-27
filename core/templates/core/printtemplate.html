@@ -42,6 +42,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>No</th>
                     <th>Item</th>
                     <th>Quantity</th>
                     <th>Rented days</th>
@@ -83,6 +84,7 @@
         date = document.querySelector('.date')
         const dt = new Date().toDateString().split(' ')
         date.innerText = `${dt[2]},${dt[1]},${dt[3]}`
+        let count = 1;
 
         data.items.forEach(item => {
             let stock;
@@ -94,7 +96,16 @@
             })
             console.log(stock)
             let tr = document.createElement('tr')
-            
+
+            // Count
+            let td0 = document.createElement('td')
+            let p0 = document.createElement('p')
+            p0.innerText = count
+            td0.style.width = '5%'
+            td0.append(p0)
+            tr.append(td0)
+
+
             // Item Name
             let td1 = document.createElement('td')
             let p1 = document.createElement('p')
@@ -134,6 +145,7 @@
             tr.append(td5)
 
             tbody.append(tr)
+            count++
         });
 
         // Vehicle Rent
@@ -143,14 +155,15 @@
         let td3 = document.createElement('td')
         let td4 = document.createElement('td')
         let td5 = document.createElement('td')
+        let td6 = document.createElement('td')
         let p1 = document.createElement('p')
         let p4 = document.createElement('p')
         p1.innerHTML = "<b>வண்டி வாடகை</b>"
         p4.innerText = "0"
         td1.append(p1)
-        td5.append(p4)
+        td6.append(p4)
 
-        tr.append(td1,td2,td3,td4,td5)
+        tr.append(td1,td2,td3,td4,td5, td6)
 
         tbody.append(tr)
 
