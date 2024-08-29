@@ -168,7 +168,7 @@
         tbody.append(tr)
 
         subtotal.innerText = "கூட்டுத்தொகை: ₹" + data.subtotal
-        dsc.innerText = `தள்ளுபடி ${(data.discount/data.subtotal)*100}% :` + ` ₹${data.discount}`
+        dsc.innerText = `தள்ளுபடி ${data.discount}% :` + ` ₹${(data.subtotal/100)*data.discount}`
         gdt.innerText = 'மொத்தம்: ₹' + data.grandtotal
 
         // Dependancy Function

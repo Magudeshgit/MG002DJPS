@@ -179,7 +179,7 @@
 
     const subtotal = document.querySelector('.subtotal')
     const discount_input = document.querySelector('#discount')
-    const discount = document.querySelector('.discount')
+    let discount = document.querySelector('.discount')
     const grandtotal = document.querySelector('.grandtotal')
 
     const form = document.querySelector('.form')
@@ -204,7 +204,7 @@
     const priceset = new Array()
 
     // Global declarations
-    let subtotalvalue, grandtotalvalue, discountvalue;
+    let subtotalvalue, grandtotalvalue, discountvalue, discountpercent;
     let payload =  []
     const beta_prods = ['PVC பந்தல்', 'Carpet (Flower Red)', 'Carpet (Red)', 'Carpet (Red)', 'Carpet (Green)']
 
@@ -322,13 +322,13 @@
         _DatewiseBilling(eventelement=null, x=e)
 
     })
-
-    discount_percent = (editinfo.discount/editinfo.subtotal)*100
-    discount_input.value = discount_percent
+    console.log(editinfo)
+    // discount_percent = (editinfo.discount/editinfo.subtotal)*100
+    discount_input.value = editinfo.discount
     vehiclerent.value = editinfo.vehiclerent
     vehicle_rent(vh=parseInt(editinfo.vehiclerent))
     // Since the stored data in DB is discount amount not percentage, we have to do below calculation   
-    _updateprice(discountpercent=parseInt(discount_percent))
+    _updateprice(discountpercent=parseInt(editinfo.discount))
 
     // Managing Buttons
     if (billstatus === 'arbitrary')
@@ -518,7 +518,7 @@
 
         // Subtotal handlers
     function _updateprice(discountpercent=0) {
-        console.log(discountpercent)
+        
         subtotalvalue=0        
         priceset.forEach(e=>{
             subtotalvalue += e[1]
@@ -532,6 +532,8 @@
         discount.innerText = "தள்ளுபடி "+ discountpercent +"%: ₹" + discountvalue.toFixed(1)
 
         grandtotal.innerText = "மொத்தம்: ₹" + grandtotalvalue
+
+        discount = discount
     }
 
         //Vehicle Rent Handlers
@@ -589,7 +591,7 @@
             Form.append("customer", customer.value)
             Form.append("billstatus", 'closed')
             Form.append("vehiclerent", vehiclerent.value)
-            Form.append("discount", discountvalue)
+            Form.append("discount", discountpercent)
             Form.append("subtotal", subtotalvalue)
             Form.append("grandtotal", grandtotalvalue)
 
