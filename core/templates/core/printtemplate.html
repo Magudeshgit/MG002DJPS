@@ -79,7 +79,6 @@
 
         const data = JSON.parse(rawdata)
         const stockdata = JSON.parse(stockrawdata)
-        console.log(stockdata)
 
         date = document.querySelector('.date')
         const dt = new Date().toDateString().split(' ')
@@ -87,6 +86,7 @@
         let count = 1;
 
         data.items.forEach(item => {
+            console.log(item)
             let stock;
             stockdata.forEach(s=>{
                 if (s['productname'] === item[0])
@@ -94,7 +94,7 @@
                     stock = s;
                 }
             })
-            console.log(stock)
+            // console.log(stock)
             let tr = document.createElement('tr')
 
             // Count
@@ -123,7 +123,7 @@
             // Rented Days
             let td3 = document.createElement('td')
             let p3 = document.createElement('p')
-            p3.innerText = getDate_Difference(item[2])
+            p3.innerText = item[2]
             td3.append(p3)
             tr.append(td3)
 
@@ -140,7 +140,7 @@
             // Price
             let td5 = document.createElement('td')
             let p5 = document.createElement('p')
-            p5.innerText = stock.price * getDate_Difference(item[2])
+            p5.innerText = stock.price * item[2] * item[1]
             td5.append(p5)
             tr.append(td5)
 
@@ -159,7 +159,7 @@
         let p1 = document.createElement('p')
         let p4 = document.createElement('p')
         p1.innerHTML = "<b>வண்டி வாடகை</b>"
-        p4.innerText = "0"
+        p4.innerText = data.vehiclerent
         td1.append(p1)
         td6.append(p4)
 
@@ -168,12 +168,12 @@
         tbody.append(tr)
 
         subtotal.innerText = "கூட்டுத்தொகை: ₹" + data.subtotal
-        dsc.innerText = 'தள்ளுபடி (%): ' + data.discount
+        dsc.innerText = `தள்ளுபடி ${(data.discount/data.subtotal)*100}% :` + ` ₹${data.discount}`
         gdt.innerText = 'மொத்தம்: ₹' + data.grandtotal
 
         // Dependancy Function
         function toDateInputValue(dateObject){
-        const local = new Date(dateObject);
+        const local = new Date(dateObject); 
         local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
         return local.toJSON().slice(0,10);
         };
@@ -182,7 +182,7 @@
         {
             const currdate = new Date(toDateInputValue(new Date()))
             const _olddate = new Date(olddate)
-            console.log(olddate, currdate)
+            // console.log(olddate, currdate)
             const timediff = Math.abs(currdate - _olddate)
             const resultant = Math.floor( timediff / (1000 * 60 * 60 * 24))
             if (resultant == 0)

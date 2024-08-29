@@ -236,14 +236,15 @@ def newbill(request):
         items = request.POST.get('items')
         billstatus = request.POST.get('billstatus')
         vehiclerent = request.POST.get('vehiclerent')
+        totaldays = request.POST.get('totaldays')
         subtotal = request.POST.get('subtotal')
         discount = request.POST.get('discount')
         grandtotal = request.POST.get('grandtotal')
         items = json.loads(items)
-        jsondata = {'items': items, 'vehiclerent': vehiclerent,'subtotal': subtotal, 'discount': discount, 'grandtotal': grandtotal}
+        jsondata = {'items': items, 'totaldays':totaldays, 'vehiclerent': vehiclerent,'subtotal': subtotal, 'discount': discount, 'grandtotal': grandtotal}
         jsondata = json.dumps(jsondata)
 
-        print('data',items)
+        
         if billstatus == 'opened':
             for i in items:
                 if not i[0] in measitems:
@@ -326,11 +327,10 @@ def laborbook(request):
 
 def attendancemanagement(request):
     attendances, status = attendance.objects.get_or_create(date=timezone.now())
-
     labors = labor.objects.all()
-    if request.method=='POST':
+    if request.method == 'POST':
         _absentees = request.POST.get('absentees')
-        _absentees = json.loads(_absentees)
+        _absentees = json.loads(_absentees) 
         attendances.absentees.clear()
         for i in _absentees:
             _labor = labors.get(laborname=i)

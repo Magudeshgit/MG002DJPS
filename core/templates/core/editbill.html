@@ -103,9 +103,6 @@
                             விலை
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            வாடகை தேதி
-                        </th>
-                        <th scope="col" class="px-6 py-3">
                             வாடகை நாட்கள்
                         </th>
                     </tr>
@@ -292,20 +289,19 @@
         const date = document.createElement('input')
         date.value = e[2]
         date.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
-        date.setAttribute('type', 'date')
-        date.setAttribute('value', toDateInputValue(new Date()))
-        date.setAttribute('disabled', true)
+        date.setAttribute('type', 'number')
+        date.addEventListener('input', _DatewiseBilling)
     
         date_row.append(date)
 
         // Total Rented Days
-        const rdate_row = document.createElement('td')
-        const rdate = document.createElement('p')
-        rdate.innerText = getDate_Difference(e[2])
-        rdate.setAttribute('disabled', true)
-        rdate.setAttribute('class', 'px-6 py-4')
+        // const rdate_row = document.createElement('td')
+        // const rdate = document.createElement('p')
+        // rdate.innerText = e[2]
+        // rdate.setAttribute('disabled', true)
+        // rdate.setAttribute('class', 'px-6 py-4')
 
-        rdate_row.append(rdate)
+        // rdate_row.append(rdate)
 
 
         tr.append(removebtn_row)   
@@ -314,22 +310,26 @@
         tr.append(instock_row)
         tr.append(price)
         tr.append(date_row)
-        tr.append(rdate_row)
+        // tr.append(rdate_row)
 
         
         table.append(tr)
         
         
-        _updateprice()
+        _updateprice()  
+        // console.log(e)
+        // console.log(priceset)
         _quantitypricing(null, product.productname, e[1])
-        _DatewiseBilling(null, product.productname, e[2], e[1])
+        _DatewiseBilling(eventelement=null, x=e)
 
     })
 
-    discount_input.value = editinfo.discount
+    discount_percent = (editinfo.discount/editinfo.subtotal)*100
+    discount_input.value = discount_percent
     vehiclerent.value = editinfo.vehiclerent
     vehicle_rent(vh=parseInt(editinfo.vehiclerent))
-    _updateprice(discountpercent=parseInt(editinfo.discount))
+    // Since the stored data in DB is discount amount not percentage, we have to do below calculation   
+    _updateprice(discountpercent=parseInt(discount_percent))
 
     // Managing Buttons
     if (billstatus === 'arbitrary')
@@ -455,7 +455,7 @@
         const price_row = document.createElement('td')
         const price = document.createElement('p')
         price.setAttribute('class', 'px-6 py-4')
-        console.log("sdf", product)
+        // console.log("sdf", product)
         if (beta_prods.includes(product.productname))
         {
             price.innerText = productobj.price + '/sqft'
@@ -471,22 +471,22 @@
 
         //Rental Date Column
         
-        const date_row = document.createElement('td')
-        const date = document.createElement('input')
-        date.value = toDateInputValue(new Date())
-        date.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
-        date.setAttribute('type', 'date')
-        date.setAttribute('value', toDateInputValue(new Date()))
-        date.addEventListener('input', _DatewiseBilling)
+        const totaldays_row = document.createElement('td')
+        const total_days = document.createElement('input')
+        total_days.value = 1
+        total_days.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
+        total_days.setAttribute('type', 'number')
+        total_days.setAttribute('value', 1)
+        total_days.addEventListener('input', _DatewiseBilling)
     
-        date_row.append(date)
+        totaldays_row.append(total_days)
 
         tr.append(removebtn_row)   
         tr.append(th)   
         tr.append(quantity_row)  
         tr.append(instock_row)
         tr.append(price)
-        tr.append(date_row)
+        tr.append(totaldays_row)
         
         table.append(tr)
         
@@ -501,7 +501,7 @@
     // Remove function for added products
     function remove_prod(e) {
         const product = _getproductinfo(e.target.parentNode.parentNode.childNodes[1].innerText)
-        console.log(product)
+        // console.log(product)
         priceset.forEach(i=>{
             let p_name = product.productname
             if (i[0] === p_name)
@@ -519,16 +519,18 @@
 
         // Subtotal handlers
     function _updateprice(discountpercent=0) {
+        console.log(discountpercent)
         subtotalvalue=0        
         priceset.forEach(e=>{
             subtotalvalue += e[1]
-    })
+        })
+
         discountvalue = ((discountpercent/100) * subtotalvalue)
         grandtotalvalue = (subtotalvalue - (discountpercent/100) * subtotalvalue)
 
         subtotal.innerText = "கூட்டுத்தொகை: ₹" + subtotalvalue
 
-        discount.innerText = "தள்ளுபடி "+ discountpercent +"%: ₹" + discountvalue
+        discount.innerText = "தள்ளுபடி "+ discountpercent +"%: ₹" + discountvalue.toFixed(1)
 
         grandtotal.innerText = "மொத்தம்: ₹" + grandtotalvalue
     }
@@ -542,6 +544,7 @@
         }
 
     vehiclerent.addEventListener('input', (f)=>{
+        console.log(f.target.value)
         flag = false
         let intval = parseInt(f.target.value)
         priceset.forEach(e=>{
@@ -556,7 +559,8 @@
             priceset.push(["vehiclerent", (isNaN(intval)?0:intval)])
         }
         vehiclerentvalue = intval
-        _updateprice(editinfo.discount)
+        // console.log(priceset)
+        _updateprice(discountpercent=parseInt(discount_percent))
     })
 
     // Discount handlers
@@ -572,13 +576,13 @@
 
         const Form = new FormData(form)
         const itemdata = new Array()
-        console.log("Billing", payload)
+        // console.log("Billing", payload)
         payload = []
         table.childNodes.forEach(e=>{
-            console.log(e)
+            // console.log(e)
             payload.push([e.childNodes[1].innerText, e.childNodes[2].childNodes[0].value, e.childNodes[5].childNodes[0].value])
         })
-        console.log(e.target.dataset.status)
+        // console.log(e.target.dataset.status)
         // Appending data manually to post payload
         if (e.target.dataset.status === 'true')
         {
@@ -658,10 +662,11 @@
             priceset.forEach(i=>{
             if (i[0] === productname)
             {
-                i[1] = (prod.price*quantity)
+                i[1] = (prod.price * quantity)
             }
         })
         }
+
         else
         {
             priceset.forEach(i=>{
@@ -675,33 +680,37 @@
         _updateprice()
     }
     //priceset.push([product.productname,product.price]) will have product name and its sub total at that point
-    function _DatewiseBilling(x, productname=null, proddate=null, quantity=null)
+    function _DatewiseBilling(eventelement=null, x=null)
     {
-        if (productname!=null)
+        // console.log(eventelement, x)
+        if (x != null)
         {
-            const prod = _getproductinfo(productname)
-            const price = prod.price * quantity
-            const diffdays = getDate_Difference(proddate)
-
-            priceset.forEach(e=>{
-            if (e[0] === productname)
-            {
-                e[1] = diffdays * price
-            }
-        })
+            // console.log("e1")
+            priceset.forEach(element=>{
+                if (element[0] === x[0])
+                {
+                    const actualprod = _getproductinfo(x[0])
+                    element[1] = actualprod.price * x[1] * x[2]
+                }
+            })   
         }
         else
         {
-            const diffdays = getDate_Difference(x.target.value)
-            const prod = _getproductinfo(x.target.parentNode.parentNode.childNodes[1].innerText)
-            const price = prod.price * x.target.parentNode.parentNode.childNodes[2].childNodes[0].value
-
-            priceset.forEach(e=>{
-                if (e[0] === x.target.parentNode.parentNode.childNodes[1].innerText)
-                {
-                    e[1] = diffdays * price
-                }
-            })
+            if (eventelement.target.value != '')            
+            {
+                priceset.forEach(i=>{
+                    if (i[0] === eventelement.target.parentNode.parentNode.childNodes[1].innerText)
+                    {
+                        const prod = _getproductinfo(i[0])
+                        // console.log("e2", prod.price, parseInt(eventelement.target.parentNode.parentNode.childNodes[2].childNodes[0].value), parseInt(eventelement.target.value))
+                        if (parseInt(eventelement.target.value) != 0)
+                        {   
+                            // console.log(prod.price, parseInt(e.target.parentNode.parentNode.childNodes[2].childNodes[0].value), parseInt(e.target.value));
+                            i[1] = prod.price * parseInt(eventelement.target.parentNode.parentNode.childNodes[2].childNodes[0].value) * parseInt(eventelement.target.value)
+                        }
+                    }
+                })      
+            }
         }
         _updateprice()
     }

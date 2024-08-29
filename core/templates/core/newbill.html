@@ -105,7 +105,7 @@
                             விலை
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            தேதி
+                            நாட்கள்
                         </th>
                     </tr>
                 </thead>
@@ -287,7 +287,7 @@
         quantity_row.append(quantity_input)
 
         // Measurement based billing products
-        console.log(beta_prods)
+
         if (beta_prods.includes(productobj.productname)) //Change after stock entry!
         {
             let measure_txt = document.createElement('p').innerText = 'Sqft'
@@ -326,16 +326,16 @@
         priceset.push([productobj.productname,productobj.price])
         price_row.append(price)
 
-        // Date Column
-        const date_row = document.createElement('td')
-        const date = document.createElement('input')
-        date.value = toDateInputValue(new Date())
-        console.log(toDateInputValue(new Date()))
-        date.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
-        date.setAttribute('type', 'date')
-        date.setAttribute('value', toDateInputValue(new Date()))
+        // totaldays
+        const totaldays_row = document.createElement('td')
+        const total_days = document.createElement('input')
+        total_days.value = 1
+        total_days.setAttribute('class', 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 products')
+        total_days.setAttribute('type', 'number')
+        total_days.setAttribute('value', 1)
+        total_days.addEventListener('input', _dayspricing)
     
-        date_row.append(date)
+        totaldays_row.append(total_days)
 
 
         tr.append(removebtn_row)   
@@ -343,7 +343,7 @@
         tr.append(quantity_row)  
         tr.append(instock_row)
         tr.append(price)
-        tr.append(date_row)
+        tr.append(totaldays_row)
         
         table.append(tr)
         
@@ -427,6 +427,7 @@
         const Form = new FormData(form)
         const itemdata = new Array()
         table.childNodes.forEach(e=>{
+            // Product name, Product Quantity, P
             console.log([e.childNodes[1].innerText,e.childNodes[2].childNodes[0].value, e.childNodes[5].childNodes[0].value])
             payload.push([e.childNodes[1].innerText,e.childNodes[2].childNodes[0].value, e.childNodes[5].childNodes[0].value])
         })
@@ -442,7 +443,7 @@
             Form.append("vehiclerent", vehiclerent.value)
             Form.append("discount", discount_input.value)
             Form.append("subtotal", subtotalvalue)
-            Form.append("grandtotal", grandtotalvalue)
+            Form.append("grandtotal", parseInt(grandtotalvalue))
 
             // console.log(Form)
             let response = fetch(document.location.origin+'/newbill/',{
@@ -457,7 +458,7 @@
                 }
                 else
                 {
-                    toast.style.display = 'flex'
+                    toast.style.display  = 'flex'
                     response_txt.innerText = 'Server Error!'
                 }
             })
@@ -479,18 +480,48 @@
 
     // Handles event listeners on quantity, removes pricing when arguments are present
     function _quantitypricing(e, productname=null, quantity=null) {
-        console.log(priceset)
         priceset.forEach(i=>{
-            console.log('sdsd', e.target.parentNode.parentNode.childNodes[1].innerText)
             if (i[0] === e.target.parentNode.parentNode.childNodes[1].innerText)
             {
-                console.log("inif", e.target.value)
-                const prod = _getproductinfo(i[0])
-                console.log(prod.price*e.target.value)
-                i[1] = (prod.price*e.target.value)
-
+                if (e.target.value != '')
+                {
+                    const prod = _getproductinfo(i[0])
+                    i[1] = prod.price * parseInt(e.target.value) * parseInt(e.target.parentNode.parentNode.childNodes[5].childNodes[0].value)
+                }
             }
         })
+        _updateprice()
+    }
+
+    function _dayspricing(e, p)
+    {
+        if (e.target.value != '')
+        {
+            priceset.forEach(i=>{
+                if (i[0] === e.target.parentNode.parentNode.childNodes[1].innerText)
+                {
+                    if (parseInt(e.target.value) != 0)
+                    {   
+                        const prod = _getproductinfo(i[0])
+                        // console.log(prod.price, parseInt(e.target.parentNode.parentNode.childNodes[2].childNodes[0].value), parseInt(e.target.value));
+                        i[1] = prod.price * parseInt(e.target.parentNode.parentNode.childNodes[2].childNodes[0].value) * parseInt(e.target.value)
+                    }
+                }
+            })      
+        }
+        // priceset.forEach(i=>{
+        //     if (i[0] === e.target.parentNode.parentNode.childNodes[1].innerText)
+        //     {
+        //         if (parseInt(e) != 0)
+        //         {
+        //             const prod = _getproductinfo(i[0])
+        //         console.log(i[1],prod.price)
+        //         x=i[1]
+        //         i[1] = x * parseInt(e.target.value)
+        //         }
+        //     }
+        // })
+        // _updateprice()
         _updateprice()
     }
 
@@ -516,9 +547,9 @@
 
         // Date Formatter
     function toDateInputValue(dateObject){
-    const local = new Date(dateObject);
-    local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
-    return local.toJSON().slice(0,10);
+        const local = new Date(dateObject);
+        local.setMinutes(dateObject.getMinutes() - dateObject.getTimezoneOffset());
+        return local.toJSON().slice(0,10);
     };
 
     // function Calc_Grandtotal(gtd)
