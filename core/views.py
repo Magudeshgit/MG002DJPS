@@ -230,7 +230,7 @@ def newbill(request):
 
     # Measurement Based Billing Materials Initialization
     measitems = ['PVC பந்தல்', 'Carpet (Flower Red)', 'Carpet (Red)', 'Carpet (Green)']
-
+    
     if request.method == 'POST':
         customer = request.POST.get('customer')
         items = request.POST.get('items')
@@ -241,6 +241,7 @@ def newbill(request):
         discount = request.POST.get('discount')
         grandtotal = request.POST.get('grandtotal')
         items = json.loads(items)
+        print(items)
         jsondata = {'items': items, 'totaldays':totaldays, 'vehiclerent': vehiclerent,'subtotal': subtotal, 'discount': discount, 'grandtotal': grandtotal}
         jsondata = json.dumps(jsondata)
 

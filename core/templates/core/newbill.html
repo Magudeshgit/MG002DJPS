@@ -196,7 +196,7 @@
 
     // Global declarations
     let vehiclerentvalue, subtotalvalue, grandtotalvalue, discountvalue;
-    const payload =  [];
+    let payload =  [];
     const beta_prods = ['PVC பந்தல்', 'Carpet (Flower Red)', 'Carpet (Red)', 'Carpet (Red)', 'Carpet (Green)']
 
 
@@ -414,7 +414,7 @@
             priceset.push(["vehiclerent", (isNaN(intval)?0:intval)])
         }
         vehiclerentvalue = intval
-        console.log('XXX', discount_input.value)
+        
         _updateprice(discount_input.value)        
     })
     
@@ -422,7 +422,7 @@
 
     function formhandler(e){
         e.preventDefault()
-        
+        console.log('buddy', payload)
 
         const Form = new FormData(form)
         const itemdata = new Array()
@@ -433,7 +433,11 @@
         })
 
         // Appending data manually to post payload
-        if (_formvalidator() === false) return;
+        if (_formvalidator() === false)
+        {
+            
+            return;
+        } 
         else
         {   
             console.log(_formvalidator())
@@ -531,6 +535,7 @@
         if (customer.value === '')
         { 
             customer_err.innerText = 'Please fill out this field'
+            payload = []
             return false
         }
 
@@ -539,6 +544,7 @@
             {
                 quantity_err.innerText = 'quantity exceeds available stock of ' + payload[index][0]
                 payload.pop(payload[index])
+                payload = []
                 return false
             }
         }
