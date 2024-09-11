@@ -591,9 +591,9 @@
             Form.append("customer", customer.value)
             Form.append("billstatus", 'closed')
             Form.append("vehiclerent", vehiclerent.value)
-            Form.append("discount", discountpercent)
-            Form.append("subtotal", subtotalvalue)
-            Form.append("grandtotal", grandtotalvalue)
+            Form.append("discount", Math.round(discountpercent))
+            Form.append("subtotal", Math.round(subtotalvalue))
+            Form.append("grandtotal", Math.round(grandtotalvalue))
 
             let response = fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
                 method: 'POST',
@@ -621,9 +621,9 @@
             if (e.target.dataset.status === 'arbitrary') Form.append("billstatus", 'arbitrary');
             else Form.append("billstatus", 'opened');
             Form.append("vehiclerent", vehiclerent.value)
-            Form.append("discount", discountvalue)
-            Form.append("subtotal", subtotalvalue)
-            Form.append("grandtotal", grandtotalvalue)
+            Form.append("discount", Math.round(discountpercent))
+            Form.append("subtotal", Math.round(subtotalvalue))
+            Form.append("grandtotal", Math.round(grandtotalvalue))
             let response = fetch(document.location.origin+'/reviewbill/' + '{{bill.id}}/',{
                 method: 'POST',
                 body: Form

@@ -274,6 +274,8 @@ def reviewbill(request,pk=None):
         subtotal = request.POST.get('subtotal')
         discount = request.POST.get('discount')
         grandtotal = request.POST.get('grandtotal')
+        
+        print(request.POST)
 
 
         try:
