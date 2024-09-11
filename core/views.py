@@ -27,7 +27,7 @@ def dashboard(request):
         if i.quantity < i.maximumstock:
             ic_stock+=1
 
-    
+
 
     context = {
         'overviewdata':ovdc.reverse()[:5],
@@ -36,8 +36,8 @@ def dashboard(request):
         'billcount': model_bills.count(),
         'salarydue': salaryobj.objects.aggregate(Sum('salarydue'))['salarydue__sum']
         }
-    
-    return render(request, "core/dashboard.html", context)   
+
+    return render(request, "core/dashboard.html", context)
 
 def stocks(request):
     stocks = stock.objects.all()
@@ -45,7 +45,7 @@ def stocks(request):
         i = request.POST.get('id')
         c = stock.objects.filter(Q(id__icontains=i) | Q(productname__icontains = i))
         print(c)
-        return render(request, "core/stocks.html", {'stocks':c}) 
+        return render(request, "core/stocks.html", {'stocks':c})
 
     return render(request, "core/stocks.html", {'stocks':stocks})
 
@@ -145,7 +145,7 @@ def addlabor(request):
             day_wage=_daywage,
             salary_amount=_salary
         )
-        
+
         opb = salaryobj.objects.create(
             employee=laborobj,
             absentdays=0,
@@ -192,7 +192,7 @@ def editsalary(request, pk):
         reason = request.POST.get('reason')
         amount = request.POST.get('amount')
         date = request.POST.get('date')
-        
+
         _transaction = [transtype,reason,amount,date]
         if transtype == 'Addition':
             ss.salarydue += int(amount)
@@ -222,7 +222,7 @@ def bills(request):
             return render(request, "core/bills.html", {"bills":searched_bills})
         else:
             return render(request, "core/bills.html", {"status": {"bills": None}})
-        
+
     context = {'bills':_bill}
     return render(request, "core/bills.html", context)
 
@@ -230,7 +230,7 @@ def newbill(request):
 
     # Measurement Based Billing Materials Initialization
     measitems = ['PVC பந்தல்', 'Carpet (Flower Red)', 'Carpet (Red)', 'Carpet (Green)']
-    
+
     if request.method == 'POST':
         customer = request.POST.get('customer')
         items = request.POST.get('items')
@@ -245,7 +245,7 @@ def newbill(request):
         jsondata = {'items': items, 'totaldays':totaldays, 'vehiclerent': vehiclerent,'subtotal': subtotal, 'discount': discount, 'grandtotal': grandtotal}
         jsondata = json.dumps(jsondata)
 
-        
+
         if billstatus == 'opened':
             for i in items:
                 if not i[0] in measitems:
@@ -254,14 +254,14 @@ def newbill(request):
                     _product.save()
 
         _customer, status = client.objects.get_or_create(clientname=customer)
-        new_bill = bill.objects.create(client=_customer,products=jsondata,billstatus=billstatus,grandtotal=int(grandtotal))   
+        new_bill = bill.objects.create(client=_customer,products=jsondata,billstatus=billstatus,grandtotal=int(grandtotal))
         new_bill.save()
-    
+
     clients = client.objects.values_list('clientname')
     stocks = stock.objects.values_list('productname')
     clients = json.dumps(list(clients.values()))
     stocks = json.dumps(list(stocks.values()))
-    
+
     context = {"clients": clients, "products": stocks}
     return render(request, "core/newbill.html", context)
 
@@ -274,8 +274,8 @@ def reviewbill(request,pk=None):
         subtotal = request.POST.get('subtotal')
         discount = request.POST.get('discount')
         grandtotal = request.POST.get('grandtotal')
-        
-        print(request.POST)
+
+        # print(request.POST)
 
 
         try:
@@ -333,7 +333,7 @@ def attendancemanagement(request):
     labors = labor.objects.all()
     if request.method == 'POST':
         _absentees = request.POST.get('absentees')
-        _absentees = json.loads(_absentees) 
+        _absentees = json.loads(_absentees)
         attendances.absentees.clear()
         for i in _absentees:
             _labor = labors.get(laborname=i)
@@ -352,7 +352,7 @@ def attendancerecords(request):
 def testinvoice(request, pk):
     _bill = bill.objects.get(id=pk)
     _stock = stock.objects.all()
-    
+
     stocks = stock.objects.values_list('productname')
     stocks = json.dumps(list(stocks.values()))
     return render(request, 'core/printtemplate.html', {'bill':_bill, 'stock': stocks})
@@ -366,4 +366,3 @@ def prindoc(request):
 
 # def monthlyreport(request):
 #     m = MonthlyReport.objects.get_or_create(month=months[timezone.localdate().month])
-    
