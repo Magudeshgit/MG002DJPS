@@ -26,20 +26,32 @@ main
     padding: 15px;
     overflow: hidden;
 }
+.companydetails
+{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px
+}
+.header-logo > img
+{
+    max-width: 180px;
+}
 .header
 {
-    margin-top: 50px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 .cpname
 {
-    font-size: 22px;
+    font-size: 16px;
 }
 .ctdt
 {
-    font-size: 16px;
+    font-size: 13px;
 }
 .billdetails{
     font-family: "Noto Serif", serif;
@@ -66,7 +78,7 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    margin-top: 50px;
+    margin-top: 25px;
   }
   th
   {
@@ -75,7 +87,7 @@ table {
   td, th {
     border: 1px solid black;
     text-align: left;
-    padding: 8px;
+    padding: 6px;
   }
   
 .total
@@ -97,4 +109,18 @@ table {
     text-align: center;
     font-size: 14px;
     margin-top: 25px;
+}
+.no-border
+{
+    border: none;   
+}
+.gpayslot
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.gpay
+{
+    max-width: 150px;
 }
