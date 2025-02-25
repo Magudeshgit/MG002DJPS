@@ -25,6 +25,7 @@ main
     position: relative;
     padding: 15px;
     overflow: hidden;
+    min-height: 3400px;
 }
 .companydetails
 {
