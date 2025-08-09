@@ -164,5 +164,6 @@ sentry_sdk.init(
     # Add data like request headers and IP for users,
     # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
     debug=True,
-    send_default_pii=False,
+    sample_rate=1,
+    send_default_pii=True,
 )
