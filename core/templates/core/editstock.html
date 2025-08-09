@@ -95,12 +95,10 @@
                     <img src="{% static  'images/Plus.svg' %}" alt="plus">
                 </button>
                 </a>
-                <a href="{% url 'deletestock' editinfo.id %}">
-                    <button class="px-2 py-2 bg-red-500 flex items-center rounded-md text-slate-50 text-sm">
-                        Delete stock
-                        <img src="{% static  'images/Trash.svg' %}" alt="plus">
-                    </button>
-                    </a>
+                <a href="{% url 'deletestock' editinfo.id %}" class="px-2 py-2 bg-red-500 flex items-center rounded-md text-slate-50 text-sm">
+                    Delete stock
+                    <img src="{% static  'images/Trash.svg' %}" alt="plus">
+                </a>
             </div>
         </form>
     </main>
