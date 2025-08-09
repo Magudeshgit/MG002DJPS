@@ -89,8 +89,7 @@ def editstock(request,pk):
     return render(request, "core/editstock.html", context={"created": created, "editinfo": prod})
 
 def deletestock(request,pk):
-    prod = stock.objects.get(id=pk)
-    prod.delete()
+    stock.objects.get(id=int(pk)).delete()
     return redirect('/stocks')
 
 def addcustomer(request):
