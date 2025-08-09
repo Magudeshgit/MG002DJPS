@@ -204,25 +204,25 @@
 
 
     // Autocomplete for Customer Name Input
-    customer.addEventListener('input', ()=>{
-        clientdata.forEach(element => {
-            if (element.clientname.toLowerCase().includes(customer.value.toLowerCase()) && !trackset.has(element.clientname)){
+    // customer.addEventListener('input', ()=>{
+    //     clientdata.forEach(element => {
+    //         if (element.clientname.toLowerCase().includes(customer.value.toLowerCase()) && !trackset.has(element.clientname)){
 
-                        const option = document.createElement("option")
-                        option.innerText = element.clientname
-                        option.setAttribute('value', element.clientname)
-                        option.setAttribute('class', 'px-4 py-2 border-b text-md')
-                        option.addEventListener('click', changeInput)
-                        datalist.append(option)
-                        trackset.add(element.clientname)
-            }
-        });
-        })
-    function changeInput(e) {
-        customer.value = e.target.value
-        e.target.parentNode.innerHTML = ''
-        trackset.clear()
-    }
+    //                     const option = document.createElement("option")
+    //                     option.innerText = element.clientname
+    //                     option.setAttribute('value', element.clientname)
+    //                     option.setAttribute('class', 'px-4 py-2 border-b text-md')
+    //                     option.addEventListener('click', changeInput)
+    //                     datalist.append(option)
+    //                     trackset.add(element.clientname)
+    //         }
+    //     });
+    //     })
+    // function changeInput(e) {
+    //     customer.value = e.target.value
+    //     e.target.parentNode.innerHTML = ''
+    //     trackset.clear()
+    // }
 
     // Autocomplete for Product Name Input
     product.addEventListener('input', ()=>{
