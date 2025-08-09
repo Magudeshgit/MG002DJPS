@@ -156,15 +156,3 @@ EMAIL_HOST_USER = 'teammghproduction@gmail.com'
 EMAIL_HOST_PASSWORD = 'euvo zkoe lnyj zukv'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-
-sentry_sdk.init(
-    dsn="https://e17fefd8427c9f04eba3d08de9a7bd01@o4509814161670144.ingest.us.sentry.io/4509814432268288",
-    integrations=[DjangoIntegration()]
-    traces_sample_rate=1.0
-    debug=True,
-    environment="dev"
-    send_default_pii=True,
-)
