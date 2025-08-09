@@ -8,9 +8,13 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, 
 # PasswordResetDoneView - mail sent template
 # PasswordResetConfirmView - new password form 
 # PasswordResetCompleteView - password reset success view
+
+def ZERROR(request):
+    x=2/0
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', avs.home),
+    path('TESTING/', ZERROR),
 
     path('auth/signup/', avs.signup),
     path('auth/signin/', avs.signin),

@@ -156,3 +156,12 @@ EMAIL_HOST_USER = 'teammghproduction@gmail.com'
 EMAIL_HOST_PASSWORD = 'euvo zkoe lnyj zukv'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://957830fe2ab733437882a3d1ceb31f94@o4509814161670144.ingest.us.sentry.io/4509814164029440",
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+)
